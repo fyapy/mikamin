@@ -2,7 +2,7 @@
   "name": "zoply-schema",
   "version": "1.0.0",
   "description": "Validate schema",
-  "main": "index.js",
+  "main": "dist/index.js",
   "author": "Amir Abdullin",
   "license": "MIT",
   "private": false,
