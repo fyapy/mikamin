@@ -12,6 +12,9 @@
     "test": "jest",
     "bench": "node ./benchmarks/aurora_sync/index.js"
   },
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
     "@types/node": "^18.6.3",
     "rimraf": "^3.0.2",
