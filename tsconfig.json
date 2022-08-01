@@ -16,11 +16,7 @@
   },
   "exclude": [
     "node_modules",
-    "templates",
     "dist",
-    "bin",
-    "migrations",
-    "docs",
     "**/*.test.ts",
     "**/*.mock.ts",
   ]
