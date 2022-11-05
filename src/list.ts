@@ -1,7 +1,6 @@
 import type {
   List,
   AnyObject,
-  ErrorFormater,
   ValidateSchema,
 } from './types'
 import { handleArrayLikeField } from './utils'
@@ -13,7 +12,7 @@ export function handleList(
   list: List,
   name: string,
   value: any,
-  formater: ErrorFormater,
+  language: string,
   accumulator: AnyObject,
   __validateSchema: ValidateSchema,
 ) {
@@ -21,7 +20,7 @@ export function handleList(
     list.__rules,
     name,
     value,
-    formater,
+    language,
     accumulator,
     eachErrorBase,
   )
@@ -34,7 +33,7 @@ export function handleList(
       const errors = __validateSchema({
         schema: list.__schema,
         values: val || {},
-        formater,
+        language,
       })
 
       if (Object.keys(errors).length !== 0) {

@@ -1,4 +1,4 @@
-import type { AnyObject, ErrorFormater, Rule } from './types'
+import type { AnyObject, Rule } from './types'
 
 export const normalizeRules = (rules: Rule[] | Rule) => Array.isArray(rules)
   ? rules
@@ -8,15 +8,14 @@ export function fileEachRule(
   rules: Rule[],
   name: string,
   value: any,
-  formater: ErrorFormater,
+  language: string,
 ) {
   for (const rule of rules) {
     if (rule.fire(value)) {
-      return formater({
-        rule: rule.rule,
-        value,
+      return rule.getError?.[language]?.({
         name,
-        meta: rule.meta,
+        value,
+        meta: rule.meta ?? {},
       })
     }
   }
@@ -25,7 +24,7 @@ export function handleArrayLikeField(
   rules: Rule[] | Rule | undefined,
   name: string,
   value: any,
-  formater: ErrorFormater,
+  language: string,
   accumulator: AnyObject,
   errorBase: AnyObject,
 ) {
@@ -33,7 +32,7 @@ export function handleArrayLikeField(
 
   const _rules = normalizeRules(rules)
 
-  const errors = fileEachRule(_rules, name, value, formater)
+  const errors = fileEachRule(_rules, name, value, language)
   if (errors) {
     if (!accumulator[name]) {
       accumulator[name] = { ...errorBase }
@@ -42,3 +41,18 @@ export function handleArrayLikeField(
     accumulator[name].field = errors
   }
 }
+
+export const enumValues = <TEnum extends { [name: string]: any }>(
+  value: TEnum,
+  nullable = false
+) => {
+  const output = Object.values(value).filter(
+    (value) => typeof value !== "string"
+  );
+
+  if (nullable) {
+    output.push(null);
+  }
+
+  return output as number[];
+};

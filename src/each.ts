@@ -1,7 +1,6 @@
 import type {
   Each,
   AnyObject,
-  ErrorFormater,
 } from './types'
 import { fileEachRule, handleArrayLikeField, normalizeRules } from './utils'
 
@@ -12,14 +11,14 @@ export function handleEach(
   each: Each,
   name: string,
   value: any,
-  formater: ErrorFormater,
+  language: string,
   accumulator: AnyObject,
 ) {
   handleArrayLikeField(
     each.__rules,
     name,
     value,
-    formater,
+    language,
     accumulator,
     eachErrorBase,
   )
@@ -30,7 +29,7 @@ export function handleEach(
     const errorsList = [] as Array<string | null>
 
     for (const [index, val] of value.entries()) {
-      const errors = fileEachRule(rules, name, val, formater)
+      const errors = fileEachRule(rules, name, val, language)
       if (errors) {
         hasError = true
         errorsList[index] = errors

@@ -1,8 +1,11 @@
 import type { Rule } from './types'
-import { enumValues } from './utils/array'
+import { enumValues } from './utils'
 
 export const required: Rule = {
   rule: 'required',
+  getError: {
+    en: ({name}) => `${name} is required!`
+  },
   fire: value => {
     if (typeof value === 'string') {
       return !value.trim()
@@ -17,12 +20,18 @@ export const required: Rule = {
 export const array: Rule = {
   rule: 'array',
   fire: value => !Array.isArray(value),
+  getError: {
+    en: ({name}) => `${name} must be a array!`
+  },
 }
 export const optinalArray: Rule = {
   rule: 'array',
   fire: value => typeof value !== 'undefined'
     ? !Array.isArray(value)
     : false,
+    getError: {
+      en: ({name}) => `${name} must be a array or not defined!`
+    }
 }
 
 export const requiredList: Rule = {
@@ -30,6 +39,9 @@ export const requiredList: Rule = {
   fire: value => Array.isArray(value)
     ? value.length === 0
     : true,
+  getError: {
+    en: ({name}) => `${name} must be a array, and not empty!`
+  }
 }
 
 const noCyrillic = (text: string) => !text || /[А-Яа-яёЁ]+/ig.test(String(text))
@@ -47,6 +59,9 @@ export const email: Rule = {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ // eslint-disable-line
     return !re.test(String(email).toLowerCase())
   },
+  getError: {
+    en: ({name}) => `${name} must be Email!`
+  }
 }
 export const numeric: Rule = {
   rule: 'number',
@@ -60,45 +75,63 @@ export const numeric: Rule = {
 
     return isNaN(Number(value))
   },
+  getError: {
+    en: ({name}) => `${name} must be number!`
+  }
 }
 export const number: Rule = {
   rule: 'number',
   fire: value => typeof value !== 'number',
+  getError: {
+    en: ({name}) => `${name} must be number!`
+  }
 }
 export const bool: Rule = {
   rule: 'bool',
   fire: value => typeof value !== 'boolean',
+  getError: {
+    en: ({name}) => `${name} must be boolean!`
+  }
 }
 
 
-export const minMax = (_min: number, _max: number): Rule => ({
+export const minMax = (min: number, max: number): Rule => ({
   rule: 'minMax',
   fire: val => typeof val !== 'number'
     ? true
-    : (val < _min || val > _max),
+    : (val < min || val > max),
   meta: {
-    min: _min,
-    max: _max,
+    min,
+    max,
   },
+  getError: {
+    en: ({name, meta}) => `${name} should not be more than ${meta.min}, but not less than ${meta.max}!`
+  }
 })
 
-export const minLength = (length: number): Rule => ({
+export const minLength = (min: number): Rule => ({
   rule: 'minLength',
   fire: text => !text
     ? true
-    : text.length < length,
+    : text.length < min,
   meta: {
-    min: length,
+    min,
   },
+  getError: {
+    en: ({name, meta}) => `The length of the ${name} must be at least ${meta.min}!`
+  }
 })
-export const maxLength = (length: number): Rule => ({
+export const maxLength = (max: number): Rule => ({
   rule: 'maxLength',
   fire: text => !text
     ? true
-    : text.length > length,
+    : text.length > max,
   meta: {
-    max: length,
+    max,
   },
+  getError: {
+    en: ({name, meta}) => `The length of the ${name} must be maximum ${meta.max}!`
+  }
 })
 
 export const httpUrl: Rule = {
@@ -112,24 +145,25 @@ export const httpUrl: Rule = {
       return false
     }
   },
+  getError: {
+    en: ({name}) => `${name} must be a valid URL!`
+  }
 }
 
-export const oneOf = (values: any[]): Rule => ({
-  rule: 'oneOf',
-  fire: value => !values.includes(value),
-  meta: {
-    values,
-  },
-})
-export const oneOfEnum = (_enum: any): Rule => {
-  const allowedValues = enumValues(_enum)
+export const oneOf = (oneOfValues: any[] | any): Rule => {
+  const values = !Array.isArray(oneOfValues)
+    ? enumValues(oneOfValues)
+    : oneOfValues
 
   return {
     rule: 'oneOf',
-    fire: value => !allowedValues.includes(value),
+    fire: value => !values.includes(value),
     meta: {
-      values: allowedValues,
+      values,
     },
+    getError: {
+      en: ({name, meta}) => `${name} must be one of these values: ${meta.values.join(', ')}!`
+    }
   }
 }
 
@@ -145,4 +179,7 @@ export const regExp = (regexp: RegExp): Rule => ({
   meta: {
     regexp,
   },
+  getError: {
+    en: ({name}) => `${name} must match ${regexp} the regular expression!`
+  }
 })

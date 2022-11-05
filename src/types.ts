@@ -1,9 +1,15 @@
+export type GetRuleError = (params: {
+  name: string
+  value: any
+  meta: Record<string, any>
+}) => string
 export interface Rule {
   // TODO
   priority?: number
   fire: (value: any) => boolean
   rule: string
   meta?: Record<string, any>
+  getError: Record<string, GetRuleError>
 }
 
 export type SchemaField =
@@ -52,25 +58,19 @@ export interface SkipRulesIf {
   __rules: Rule[] | Rule
 }
 export type AnyObject = Record<string, any>
-export type ErrorFormater = (props: {
-  rule: string
-  name: string
-  value: any
-  meta?: Record<string, any>
-}) => string
 
 export type FireRule = (
   fns: Rule | Rule[],
   name: string,
   value: any,
-  formater: ErrorFormater,
+  language: string,
   accumulator: AnyObject,
 ) => void
 export type ValidateSchema = <V = any>(
   props: {
     schema: Schema
     values: V
-    formater?: ErrorFormater
+    language?: string
   },
   accumulator?: AnyObject,
 ) => AnyObject

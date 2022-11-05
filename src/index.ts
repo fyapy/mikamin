@@ -1,13 +1,12 @@
 import type {
   Each,
   Rule,
-  FireRule,
   List,
-  ValidateSchema,
   Schema,
+  FireRule,
+  ValidateSchema,
 } from './types'
 import { handleEach } from './each'
-import { formatErrorMsg } from './formatter'
 import { handleList } from './list'
 
 export * from './rules'
@@ -30,16 +29,15 @@ const fireRules: FireRule = (
   fns,
   name,
   value,
-  formater,
+  language,
   accumulator,
 ) => {
   if (!Array.isArray(fns)) {
     if (fns.fire(value)) {
-      accumulator[name] = formater({
+      accumulator[name] = fns.getError?.[language]?.({
         name,
         value,
-        rule: fns.rule,
-        meta: fns.meta,
+        meta: fns.meta ?? {},
       })
     }
 
@@ -48,22 +46,22 @@ const fireRules: FireRule = (
 
   for (const fn of fns) {
     if (fn.fire(value)) {
-      accumulator[name] = formater({
+      accumulator[name] = fn.getError?.[language]?.({
         name,
         value,
-        rule: fn.rule,
-        meta: fn.meta,
+        meta: fn.meta ?? {},
       })
       return
     }
   }
 }
 
+const defaultLanguage = 'en'
 export const validateSchema: ValidateSchema = (
   {
     schema,
     values,
-    formater = formatErrorMsg,
+    language = defaultLanguage,
   },
   accumulator = {},
 ) => {
@@ -78,21 +76,21 @@ export const validateSchema: ValidateSchema = (
     ) {
       if (fns?.__type === 'skip') {
         if (!fns.__skip(value)) {
-          fireRules(fns.__rules, name, value, formater, accumulator)
+          fireRules(fns.__rules, name, value, language, accumulator)
         }
       } else {
-        fireRules(fns, name, value, formater, accumulator)
+        fireRules(fns, name, value, language, accumulator)
       }
     } else if (fns['__type'] === 'each') {
-      handleEach(fns, name, value, formater, accumulator)
+      handleEach(fns, name, value, language, accumulator)
     } else if (fns['__type'] === 'list') {
-      handleList(fns, name, value, formater, accumulator, validateSchema)
+      handleList(fns, name, value, language, accumulator, validateSchema)
     } else if (typeof fns === 'object') {
       // handle object
       const errors = validateSchema({
         schema: fns,
         values: value || {},
-        formater,
+        language,
       })
 
       if (Object.keys(errors).length !== 0) {
