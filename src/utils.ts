@@ -11,7 +11,7 @@ export function fileEachRule(
   language: string,
 ) {
   for (const rule of rules) {
-    if (rule.fire(value)) {
+    if (!rule.valid(value)) {
       return rule.getError?.[language]?.({
         name,
         value,

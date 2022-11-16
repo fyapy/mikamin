@@ -22,7 +22,7 @@ describe('validateSchema', () => {
     })
   })
 
-  test('required should validate', () => {
+  test('required should throw error for null', () => {
     const nullErrors = validateSchema({
       schema: {
         name: required,
@@ -35,7 +35,8 @@ describe('validateSchema', () => {
     expect(nullErrors).toEqual({
       name: 'name is required!',
     })
-
+  })
+  test('required should throw error for empty string', () => {
     const emptyStringErrors = validateSchema({
       schema: {
         name: required,

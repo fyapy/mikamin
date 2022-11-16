@@ -3,7 +3,7 @@ import type {
   Rule,
   List,
   Schema,
-  FireRule,
+  ExecuteRule,
   ValidateSchema,
 } from './types'
 import { handleEach } from './each'
@@ -25,7 +25,7 @@ export const each = (eachRules: Rule[] | Rule, rules?: Rule[] | Rule): Each => (
   __eachRules: eachRules,
 })
 
-const fireRules: FireRule = (
+const executeRules: ExecuteRule = (
   fns,
   name,
   value,
@@ -33,7 +33,7 @@ const fireRules: FireRule = (
   accumulator,
 ) => {
   if (!Array.isArray(fns)) {
-    if (fns.fire(value)) {
+    if (!fns.valid(value)) {
       accumulator[name] = fns.getError?.[language]?.({
         name,
         value,
@@ -45,7 +45,7 @@ const fireRules: FireRule = (
   }
 
   for (const fn of fns) {
-    if (fn.fire(value)) {
+    if (!fn.valid(value)) {
       accumulator[name] = fn.getError?.[language]?.({
         name,
         value,
@@ -71,15 +71,15 @@ export const validateSchema: ValidateSchema = (
 
     if (
       Array.isArray(fns)
-      || typeof fns?.fire === 'function'
+      || typeof fns?.valid === 'function'
       || fns?.__type === 'skip'
     ) {
       if (fns?.__type === 'skip') {
         if (!fns.__skip(value)) {
-          fireRules(fns.__rules, name, value, language, accumulator)
+          executeRules(fns.__rules, name, value, language, accumulator)
         }
       } else {
-        fireRules(fns, name, value, language, accumulator)
+        executeRules(fns, name, value, language, accumulator)
       }
     } else if (fns['__type'] === 'each') {
       handleEach(fns, name, value, language, accumulator)

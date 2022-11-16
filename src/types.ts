@@ -6,7 +6,7 @@ export type GetRuleError = (params: {
 export interface Rule {
   // TODO
   priority?: number
-  fire: (value: any) => boolean
+  valid: (value: any) => boolean
   rule: string
   meta?: Record<string, any>
   getError: Record<string, GetRuleError>
@@ -59,7 +59,7 @@ export interface SkipRulesIf {
 }
 export type AnyObject = Record<string, any>
 
-export type FireRule = (
+export type ExecuteRule = (
   fns: Rule | Rule[],
   name: string,
   value: any,

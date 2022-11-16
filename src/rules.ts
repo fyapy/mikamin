@@ -6,58 +6,59 @@ export const required: Rule = {
   getError: {
     en: ({name}) => `${name} is required!`
   },
-  fire: value => {
+  valid: value => {
     if (typeof value === 'string') {
-      return !value.trim()
+      return value.trim() !== ''
     }
     if (Array.isArray(value)) {
-      return value.length === 0
+      return value.length !== 0
     }
 
-    return typeof value === 'undefined' || value === null
+    return typeof value !== 'undefined' && value !== null
   },
 }
 export const array: Rule = {
   rule: 'array',
-  fire: value => !Array.isArray(value),
+  valid: value => Array.isArray(value),
   getError: {
     en: ({name}) => `${name} must be a array!`
   },
 }
 export const optinalArray: Rule = {
   rule: 'array',
-  fire: value => typeof value !== 'undefined'
-    ? !Array.isArray(value)
-    : false,
-    getError: {
-      en: ({name}) => `${name} must be a array or not defined!`
-    }
+  valid: value => typeof value === 'undefined'
+    ? true
+    : Array.isArray(value),
+  getError: {
+    en: ({name}) => `${name} must be a array or not defined!`
+  }
 }
 
 export const requiredList: Rule = {
   rule: 'requiredList',
-  fire: value => Array.isArray(value)
-    ? value.length === 0
-    : true,
+  valid: value => Array.isArray(value)
+    ? value.length !== 0
+    : false,
   getError: {
     en: ({name}) => `${name} must be a array, and not empty!`
   }
 }
 
-const noCyrillic = (text: string) => !text || /[А-Яа-яёЁ]+/ig.test(String(text))
+const noCyrillic = (text: string) => /[А-Яа-яёЁ]+/ig.test(text)
 
 export const email: Rule = {
   rule: 'email',
-  fire: email => {
+  valid: email => {
     if (!email) {
-      return true
+      return false
     }
-    if (noCyrillic(email)) {
-      return true
+    const stringEmail = String(email)
+    if (noCyrillic(stringEmail)) {
+      return false
     }
 
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ // eslint-disable-line
-    return !re.test(String(email).toLowerCase())
+    return re.test(stringEmail.toLowerCase())
   },
   getError: {
     en: ({name}) => `${name} must be Email!`
@@ -65,15 +66,15 @@ export const email: Rule = {
 }
 export const numeric: Rule = {
   rule: 'number',
-  fire: value => {
+  valid: value => {
     if (value === null) {
-      return true
+      return false
     }
     if (typeof value === 'string' && value.length === 0) {
-      return true
+      return false
     }
 
-    return isNaN(Number(value))
+    return !isNaN(Number(value))
   },
   getError: {
     en: ({name}) => `${name} must be number!`
@@ -81,14 +82,15 @@ export const numeric: Rule = {
 }
 export const number: Rule = {
   rule: 'number',
-  fire: value => typeof value !== 'number',
+  valid: value => typeof value === 'number',
   getError: {
     en: ({name}) => `${name} must be number!`
   }
 }
+
 export const bool: Rule = {
   rule: 'bool',
-  fire: value => typeof value !== 'boolean',
+  valid: value => typeof value === 'boolean',
   getError: {
     en: ({name}) => `${name} must be boolean!`
   }
@@ -97,9 +99,9 @@ export const bool: Rule = {
 
 export const minMax = (min: number, max: number): Rule => ({
   rule: 'minMax',
-  fire: val => typeof val !== 'number'
+  valid: val => typeof val === 'number'
     ? true
-    : (val < min || val > max),
+    : (val >= min && val <= max),
   meta: {
     min,
     max,
@@ -111,9 +113,16 @@ export const minMax = (min: number, max: number): Rule => ({
 
 export const minLength = (min: number): Rule => ({
   rule: 'minLength',
-  fire: text => !text
-    ? true
-    : text.length < min,
+  valid: text => {
+    if (!text) {
+      return false
+    }
+    if (typeof text === 'string' || Array.isArray(text)) {
+      return text.length >= min
+    }
+
+    return false
+  },
   meta: {
     min,
   },
@@ -123,9 +132,16 @@ export const minLength = (min: number): Rule => ({
 })
 export const maxLength = (max: number): Rule => ({
   rule: 'maxLength',
-  fire: text => !text
-    ? true
-    : text.length > max,
+  valid: text => {
+    if (!text) {
+      return false
+    }
+    if (typeof text === 'string' || Array.isArray(text)) {
+      return text.length <= max
+    }
+
+    return false
+  },
   meta: {
     max,
   },
@@ -136,7 +152,7 @@ export const maxLength = (max: number): Rule => ({
 
 export const httpUrl: Rule = {
   rule: 'httpUrl',
-  fire: value => {
+  valid: value => {
     try {
       const url = new URL(value)
 
@@ -157,7 +173,7 @@ export const oneOf = (oneOfValues: any[] | any): Rule => {
 
   return {
     rule: 'oneOf',
-    fire: value => !values.includes(value),
+    valid: value => values.includes(value),
     meta: {
       values,
     },
@@ -169,12 +185,12 @@ export const oneOf = (oneOfValues: any[] | any): Rule => {
 
 export const regExp = (regexp: RegExp): Rule => ({
   rule: 'regExp',
-  fire: value => {
+  valid: value => {
     if (!value) {
-      return true
+      return false
     }
 
-    return !regexp.test(String(value))
+    return regexp.test(String(value))
   },
   meta: {
     regexp,
