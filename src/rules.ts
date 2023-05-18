@@ -44,7 +44,12 @@ export const requiredList: Rule = {
   }
 }
 
-const noCyrillic = (text: string) => /[А-Яа-яёЁ]+/ig.test(text)
+const CYRILLIC_REGEXP = /[А-Яа-яёЁ]+/ig
+const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+const resetRegexpState = (regexp: RegExp) => {
+  regexp.lastIndex = -1
+}
 
 export const email: Rule = {
   rule: 'email',
@@ -53,12 +58,13 @@ export const email: Rule = {
       return false
     }
     const stringEmail = String(email)
-    if (noCyrillic(stringEmail)) {
+    resetRegexpState(CYRILLIC_REGEXP)
+    if (CYRILLIC_REGEXP.test(stringEmail)) {
       return false
     }
 
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ // eslint-disable-line
-    return re.test(stringEmail.toLowerCase())
+    resetRegexpState(EMAIL_REGEXP)
+    return EMAIL_REGEXP.test(stringEmail.toLowerCase())
   },
   getError: {
     en: ({name}) => `${name} must be Email!`
