@@ -1,5 +1,5 @@
 import { bench, run } from 'mitata'
-import { numeric, required, validateSchema } from '../src/index.js'
+import { numeric, required, handleSchema } from '../src/index.js'
 
 const schema = {
   from: [required, numeric],
@@ -7,7 +7,7 @@ const schema = {
 }
 
 bench('simple bool validate', () => {
-  validateSchema({
+  handleSchema({
     schema,
     values: {},
   })

@@ -68,7 +68,7 @@ export type ExecuteRule = (
   language: string,
   accumulator: AnyObject,
 ) => void
-export type ValidateSchema = <V = any>(
+export type HandleSchema = <V = any>(
   props: {
     schema: Schema
     values: V

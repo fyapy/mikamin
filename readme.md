@@ -28,7 +28,7 @@ import {
   requiredList,
   each,
   optional,
-  validateSchema,
+  handleSchema,
 } from 'libs/vladik-schema'
 
 enum Gender {
@@ -60,7 +60,7 @@ const searchSchema = {
 }
 
 // check validity
-const errors = validateSchema({
+const errors = handleSchema({
   schema: searchSchema,
   values: {
     genders: [1],
@@ -79,7 +79,7 @@ console.log(errors)
 
 ### Using a custom locale dictionary
 
-When you call `validateSchema`, he have parametr `fromatter`, and you able to detect user language, and after just
+When you call `handleSchema`, he have parametr `fromatter`, and you able to detect user language, and after just
 
 ```ts
 const formatErrorMsg = (lang: Language): ErrorFormater => ({ rule, name, meta }) => {
@@ -108,7 +108,7 @@ const formatErrorMsg = (lang: Language): ErrorFormater => ({ rule, name, meta })
 }
 
 // Validation
-const errors = validateSchema({
+const errors = handleSchema({
   schema,
   values: req.body,
   formater: formatErrorMsg(req.lang),
@@ -123,7 +123,7 @@ type Validate<T> = preHandlerHookHandler<RawServerDefault, RawRequestDefaultExpr
 export const zoplyValidate = (schema: any): Validate<any> => (req, res, done) => {
   req.lang = parseAcceptLanguage(req.headers['accept-language']!)
 
-  const errors = validateSchema({
+  const errors = handleSchema({
     schema,
     values: req.body,
     formater: formatErrorMsg(req.lang),

@@ -5,12 +5,12 @@ import {
   nullable,
   numeric,
   bool,
-  validateSchema,
+  handleSchema,
 } from '../src'
 
-describe('validateSchema', () => {
+describe('handleSchema', () => {
   test('bool should validate', () => {
-    const errors = validateSchema({
+    const errors = handleSchema({
       schema: {
         hasPhoto: bool,
       },
@@ -23,7 +23,7 @@ describe('validateSchema', () => {
   })
 
   test('required should throw error for null', () => {
-    const nullErrors = validateSchema({
+    const nullErrors = handleSchema({
       schema: {
         name: required,
       },
@@ -37,7 +37,7 @@ describe('validateSchema', () => {
     })
   })
   test('required should throw error for empty string', () => {
-    const emptyStringErrors = validateSchema({
+    const emptyStringErrors = handleSchema({
       schema: {
         name: required,
       },
@@ -52,7 +52,7 @@ describe('validateSchema', () => {
   })
 
   test('nullable should skip validation for null value', () => {
-    const errors = validateSchema({
+    const errors = handleSchema({
       schema: {
         cityId: nullable(required),
       },
@@ -65,7 +65,7 @@ describe('validateSchema', () => {
   })
 
   test('each should validate values in list', () => {
-    const errors = validateSchema({
+    const errors = handleSchema({
       schema: {
         ids: each(required),
       },
@@ -83,7 +83,7 @@ describe('validateSchema', () => {
   })
 
   test('each should validate own property', () => {
-    const errors = validateSchema({
+    const errors = handleSchema({
       schema: {
         ids: each(required, requiredList),
       },
@@ -99,7 +99,7 @@ describe('validateSchema', () => {
   })
 
   test('should validate nested objects', () => {
-    const errors = validateSchema({
+    const errors = handleSchema({
       schema: {
         age: {
           from: [required, numeric],

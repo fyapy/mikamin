@@ -4,7 +4,7 @@ import type {
   List,
   Schema,
   ExecuteRule,
-  ValidateSchema,
+  HandleSchema,
 } from './types.js'
 import { handleEach } from './each.js'
 import { handleList } from './list.js'
@@ -72,7 +72,7 @@ const executeRules: ExecuteRule = (
 }
 
 const defaultLanguage = 'en'
-export const validateSchema: ValidateSchema = (
+export const handleSchema: HandleSchema = (
   {
     schema,
     values,
@@ -99,10 +99,10 @@ export const validateSchema: ValidateSchema = (
     } else if (fns['__type'] === 'each') {
       handleEach(fns, name, value, language, accumulator)
     } else if (fns['__type'] === 'list') {
-      handleList(fns, name, value, language, accumulator, validateSchema)
+      handleList(fns, name, value, language, accumulator, handleSchema)
     } else if (typeof fns === 'object') {
       // handle object
-      const errors = validateSchema({
+      const errors = handleSchema({
         schema: fns,
         values: value || {},
         language,

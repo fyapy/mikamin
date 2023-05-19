@@ -1,7 +1,7 @@
 import type {
   List,
   AnyObject,
-  ValidateSchema,
+  HandleSchema,
 } from './types.js'
 import { handleArrayLikeField } from './utils.js'
 
@@ -14,7 +14,7 @@ export function handleList(
   value: any,
   language: string,
   accumulator: AnyObject,
-  __validateSchema: ValidateSchema,
+  __handleSchema: HandleSchema,
 ) {
   handleArrayLikeField(
     list.__rules,
@@ -30,7 +30,7 @@ export function handleList(
     const errorsList = [] as Array<AnyObject | null>
 
     for (const [index, val] of value.entries()) {
-      const errors = __validateSchema({
+      const errors = __handleSchema({
         schema: list.__schema,
         values: val || {},
         language,

@@ -1,6 +1,6 @@
 import {
   bool,
-  validateSchema,
+  handleSchema,
   setTranslations,
 } from '../src'
 
@@ -10,7 +10,7 @@ describe('translations', () => {
   })
 
   test('bool should have custom error message', () => {
-    const errors = validateSchema({
+    const errors = handleSchema({
       schema: {
         hasPhoto: bool,
       },
@@ -27,7 +27,7 @@ describe('translations', () => {
   })
 
   test('bool should have custom error message for other languages', () => {
-    const errors = validateSchema({
+    const errors = handleSchema({
       schema: {
         hasPhoto: bool,
       },
