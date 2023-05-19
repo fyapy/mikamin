@@ -9,8 +9,10 @@ export interface Rule {
   valid: (value: any) => boolean
   rule: string
   meta?: Record<string, any>
-  getError: Record<string, GetRuleError>
+  errorMessage: Record<string, GetRuleError>
 }
+
+export type Translations = Record<string, Record<string, GetRuleError>>
 
 export type SchemaField =
   | Rule

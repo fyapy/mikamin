@@ -5,13 +5,28 @@ import type {
   Schema,
   ExecuteRule,
   ValidateSchema,
-} from './types'
-import { handleEach } from './each'
-import { handleList } from './list'
+} from './types.js'
+import { handleEach } from './each.js'
+import { handleList } from './list.js'
 
-export * from './rules'
-export * from './skips'
-export * from './types'
+export {setTranslations, translations} from './translations.js'
+export * from './skips.js'
+export * from './types.js'
+
+export {array} from './rules/array.js'
+export {bool} from './rules/bool.js'
+export {email} from './rules/email.js'
+export {httpUrl} from './rules/httpUrl.js'
+export {maxLength} from './rules/maxLength.js'
+export {minLength} from './rules/minLength.js'
+export {minMax} from './rules/minMax.js'
+export {number} from './rules/number.js'
+export {numeric} from './rules/numeric.js'
+export {oneOf} from './rules/oneOf.js'
+export {optinalArray} from './rules/optinalArray.js'
+export {regExp} from './rules/regExp.js'
+export {required} from './rules/required.js'
+export {requiredList} from './rules/requiredList.js'
 
 export const list = <T extends any[] = any[]>(props: Schema<T[0]>, rules?: Rule[] | Rule): List => ({
   __type: 'list',
@@ -34,7 +49,7 @@ const executeRules: ExecuteRule = (
 ) => {
   if (!Array.isArray(fns)) {
     if (!fns.valid(value)) {
-      accumulator[name] = fns.getError?.[language]?.({
+      accumulator[name] = fns.errorMessage?.[language]?.({
         name,
         value,
         meta: fns.meta ?? {},
@@ -46,7 +61,7 @@ const executeRules: ExecuteRule = (
 
   for (const fn of fns) {
     if (!fn.valid(value)) {
-      accumulator[name] = fn.getError?.[language]?.({
+      accumulator[name] = fn.errorMessage?.[language]?.({
         name,
         value,
         meta: fn.meta ?? {},

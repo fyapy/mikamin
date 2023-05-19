@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "target": "es2017",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "ESNext",
+    "moduleResolution": "nodenext",
     "rootDir": "src",
     "outDir": "dist",
     "lib": ["es2019"],
@@ -17,6 +17,7 @@
   "exclude": [
     "node_modules",
     "dist",
+    "benchmarks",
     "**/*.test.ts",
     "**/*.mock.ts",
   ]

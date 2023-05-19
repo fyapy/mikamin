@@ -1,4 +1,4 @@
-import type { AnyObject, Rule } from './types'
+import type { AnyObject, Rule } from './types.js'
 
 export const normalizeRules = (rules: Rule[] | Rule) => Array.isArray(rules)
   ? rules
@@ -12,7 +12,7 @@ export function fileEachRule(
 ) {
   for (const rule of rules) {
     if (!rule.valid(value)) {
-      return rule.getError?.[language]?.({
+      return rule.errorMessage?.[language]?.({
         name,
         value,
         meta: rule.meta ?? {},

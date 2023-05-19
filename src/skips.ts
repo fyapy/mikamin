@@ -1,4 +1,4 @@
-import type { Rule, SkipRulesIf } from './types'
+import type { Rule, SkipRulesIf } from './types.js'
 
 type SkipFn = (rules: Rule[] | Rule) => SkipRulesIf
 

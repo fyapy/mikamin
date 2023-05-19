@@ -2,8 +2,8 @@ import type {
   List,
   AnyObject,
   ValidateSchema,
-} from './types'
-import { handleArrayLikeField } from './utils'
+} from './types.js'
+import { handleArrayLikeField } from './utils.js'
 
 const eachErrorBase = {
   __type: 'list',
