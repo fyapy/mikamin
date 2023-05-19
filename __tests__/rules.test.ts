@@ -6,6 +6,7 @@ import {
   numeric,
   bool,
   handleSchema,
+  noCyrillic,
 } from '../src'
 
 describe('handleSchema', () => {
@@ -114,6 +115,23 @@ describe('handleSchema', () => {
         from: 'from is required!',
         to: 'to is required!',
       },
+    })
+  })
+
+  test('should dont allow cyrillic', () => {
+    const errors = handleSchema({
+      schema: {
+        name: noCyrillic,
+        name2: noCyrillic,
+      },
+      values: {
+        name: 'Аня',
+        name2: 'Anna'
+      },
+    })
+
+    expect(errors).toEqual({
+      name: 'name must not contain Cyrillic characters!',
     })
   })
 })

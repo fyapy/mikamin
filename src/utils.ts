@@ -56,3 +56,10 @@ export const enumValues = <TEnum extends { [name: string]: any }>(
 
   return output as number[];
 };
+
+export const CYRILLIC_REGEXP = /[А-Яа-яёЁ]+/ig
+export const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+export const resetRegexpState = (regexp: RegExp) => {
+  regexp.lastIndex = -1
+}

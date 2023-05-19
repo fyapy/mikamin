@@ -1,6 +1,6 @@
-const fs = require('fs/promises')
-const fsSync = require('fs')
-const path = require('path')
+import fs from 'fs/promises'
+import fsSync from 'fs'
+import path from 'path'
 
 const buildDir = './build'
 
@@ -17,6 +17,24 @@ async function createEsmModulePackageJson() {
       }
     }
   })
+
+
+  const packageString = (await fs.readFile('./package.json')).toString()
+  const packageJson = JSON.parse(packageString)
+
+  delete packageJson.type
+  delete packageJson.files
+  delete packageJson.scripts
+  delete packageJson.devDependencies
+  packageJson.main = packageJson.main.replace('/build', '')
+  packageJson.types = packageJson.types.replace('/build', '')
+  packageJson.module = packageJson.module.replace('/build', '')
+
+  const newPackageJsonPath = path.join(buildDir, '/package.json')
+  await fs.writeFile(newPackageJsonPath, JSON.stringify(packageJson))
+
+
+  await fs.copyFile('./readme.md', './build/readme.md')
 }
 
 createEsmModulePackageJson()
