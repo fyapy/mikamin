@@ -9,6 +9,7 @@ import type {
 import { handleEach } from './each.js'
 import { handleList } from './list.js'
 
+export {inputHandler} from './fastify.js'
 export {setTranslations, translations} from './translations.js'
 export * from './skips.js'
 export * from './types.js'
