@@ -8,6 +8,7 @@ import type {
 } from './types.js'
 import { handleEach } from './each.js'
 import { handleList } from './list.js'
+import { logErrorUnsupportedLanguage } from './utils.js'
 
 export {inputHandler} from './fastify.js'
 export {setTranslations, translations} from './translations.js'
@@ -53,11 +54,11 @@ const executeRules: ExecuteRule = (
 ) => {
   if (!Array.isArray(fns)) {
     if (!fns.valid(value)) {
-      accumulator[name] = fns.errorMessage?.[language]?.({
-        name,
-        value,
-        meta: fns.meta ?? {},
-      })
+      const message = fns.errorMessage?.[language]
+
+      accumulator[name] = typeof message === 'undefined'
+        ? logErrorUnsupportedLanguage(language)
+        : message({name, value, meta: fns.meta ?? {}})
     }
 
     return
@@ -65,11 +66,11 @@ const executeRules: ExecuteRule = (
 
   for (const fn of fns) {
     if (!fn.valid(value)) {
-      accumulator[name] = fn.errorMessage?.[language]?.({
-        name,
-        value,
-        meta: fn.meta ?? {},
-      })
+      const message = fn.errorMessage?.[language]
+
+      accumulator[name] = typeof message === 'undefined'
+        ? logErrorUnsupportedLanguage(language)
+        : message({name, value, meta: fn.meta ?? {}})
       return
     }
   }

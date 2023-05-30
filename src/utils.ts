@@ -1,5 +1,10 @@
 import type { AnyObject, Rule } from './types.js'
 
+export const logErrorUnsupportedLanguage = (language: string) => {
+  console.error(`Unsuppoerted language: ${language}`)
+  return ''
+}
+
 export const normalizeRules = (rules: Rule[] | Rule) => Array.isArray(rules)
   ? rules
   : [rules]
@@ -12,11 +17,11 @@ export function fileEachRule(
 ) {
   for (const rule of rules) {
     if (!rule.valid(value)) {
-      return rule.errorMessage?.[language]?.({
-        name,
-        value,
-        meta: rule.meta ?? {},
-      })
+      const message = rule.errorMessage?.[language]
+
+      return typeof message === 'undefined'
+        ? logErrorUnsupportedLanguage(language)
+        : message({name, value,  meta: rule.meta ?? {}})
     }
   }
 }
