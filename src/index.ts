@@ -29,6 +29,8 @@ export {regExp} from './rules/regExp.js'
 export {required} from './rules/required.js'
 export {requiredList} from './rules/requiredList.js'
 export {noCyrillic} from './rules/noCyrillic.js'
+export {ip} from './rules/ip.js'
+export {uuid} from './rules/uuid.js'
 
 export const list = <T extends any[] = any[]>(props: Schema<T[0]>, rules?: Rule[] | Rule): List => ({
   __type: 'list',

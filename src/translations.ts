@@ -15,6 +15,8 @@ export const translations: Translations = {
   required: {en: ({name}) => `${name} is required!`},
   requiredList: {en: ({name}) => `${name} must be a array, and not empty!`},
   noCyrillic: {en: ({name}) => `${name} must not contain Cyrillic characters!`},
+  ip: {en: ({name}) => `${name} must be IP address!`},
+  uuid: {en: ({name}) => `${name} must be UUID!`},
 }
 
 export const setTranslations = (newTranslations: Translations) => {

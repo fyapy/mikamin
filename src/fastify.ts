@@ -7,10 +7,10 @@ import type {
 import { handleSchema } from "./index.js"
 
 
-export const inputHandler = <T = any>(schema: any): preHandlerHookHandler<RawServerDefault, RawRequestDefaultExpression, RawReplyDefaultExpression, { Body: T }> => ({body}, res, done) => {
+export const inputHandler = <T = any>(schema: any): preHandlerHookHandler<RawServerDefault, RawRequestDefaultExpression, RawReplyDefaultExpression, { Body: T }> => (req, res, done) => {
   const errors = handleSchema({
     schema,
-    values: body,
+    values: req.body,
     language: 'ru',
   })
 

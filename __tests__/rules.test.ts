@@ -7,6 +7,8 @@ import {
   bool,
   handleSchema,
   noCyrillic,
+  ip,
+  uuid,
 } from '../src'
 
 describe('handleSchema', () => {
@@ -133,5 +135,23 @@ describe('handleSchema', () => {
     expect(errors).toEqual({
       name: 'name must not contain Cyrillic characters!',
     })
+  })
+
+  test('should currectly validate IP address', () => {
+    const errors = handleSchema({
+      schema: {ip},
+      values: {ip: '188 .124.12.102'},
+    })
+
+    expect(errors).toEqual({ip: 'ip must be IP address!'})
+  })
+
+  test('should currectly validate v4 UUID', () => {
+    const errors = handleSchema({
+      schema: {uuid: uuid.v4},
+      values: {uuid: '188 .124.12.102'},
+    })
+
+    expect(errors).toEqual({uuid: 'uuid must be UUID!'})
   })
 })
