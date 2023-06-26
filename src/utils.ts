@@ -47,13 +47,17 @@ export function handleArrayLikeField(
   }
 }
 
+// const enumLength = (enm: any) => Object.keys(enm).map(value => Number(isNaN(Number(value)))).reduce((a, b) => a + b, 0)
+
 export const enumValues = <TEnum extends { [name: string]: any }>(
   value: TEnum,
   nullable = false
 ) => {
-  const output = Object.values(value).filter(
-    (value) => typeof value !== "string"
-  );
+  const values = Object.values(value)
+  const isNumiricEnum = values.some(val => typeof val === 'number')
+  const output = isNumiricEnum
+    ? values.filter(value => typeof value !== 'string')
+    : values
 
   if (nullable) {
     output.push(null);
