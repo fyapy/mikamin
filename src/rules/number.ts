@@ -1,13 +1,16 @@
-import { translations } from "../translations.js";
-import { Rule } from "../types.js";
+import {translations} from '../translations.js'
+import {types} from '../utils.js'
+import {Rule} from '../types.js'
 
-export const number: Rule = {
+export const number: Rule<number> = {
+  type: types.number,
   rule: 'number',
   errorMessage: translations.number,
   valid: value => typeof value === 'number',
 }
 
-export const numberStr: Rule = {
+export const stringNumber: Rule<string> = {
+  type: types.string,
   rule: 'number',
   errorMessage: translations.number,
   valid: value => {

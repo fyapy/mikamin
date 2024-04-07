@@ -1,7 +1,9 @@
-import { translations } from "../translations.js";
-import { Rule } from "../types.js";
+import {translations} from '../translations.js'
+import {types} from '../utils.js'
+import {Rule} from '../types.js'
 
-export const minMax = (min: number, max: number): Rule => ({
+export const minMax = (min: number, max: number): Rule<number> => ({
+  type: types.number,
   rule: 'minMax',
   errorMessage: translations.minMax,
   meta: {min, max},

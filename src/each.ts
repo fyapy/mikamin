@@ -2,7 +2,7 @@ import type {
   Each,
   AnyObject,
 } from './types.js'
-import { fileEachRule, handleArrayLikeField, normalizeRules } from './utils.js'
+import {fileEachRule, handleArrayLikeField, normalizeRules} from './utils.js'
 
 const eachErrorBase = {
   __type: 'each',

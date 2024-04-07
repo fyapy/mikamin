@@ -3,58 +3,66 @@ export type GetRuleError = (params: {
   value: any
   meta: Record<string, any>
 }) => string
-export interface Rule {
-  // TODO
-  priority?: number
+
+export interface Rule<T = any> {
+  type: T
   valid: (value: any) => boolean
   rule: string
   meta?: Record<string, any>
   errorMessage: Record<string, GetRuleError>
 }
 
+export type NormalizeRuleType<R extends Rule | Rule[]> = R extends Rule
+  ? R['type']
+  : R extends Array<infer Item extends Rule>
+    ? Item['type']
+    : never
+
+export type RuleType<R extends FieldType> = R extends Rule
+  ? R['type']
+  : R extends Array<infer Item extends Rule>
+    ? Item['type']
+    : R extends SkipRulesIf
+      ? R['skipType'] | R['type']
+      : R extends ObjectRule
+        ? R['type']
+        : R extends Each<infer E>
+          ? E
+          : R extends List<infer E>
+            ? E
+            : never
+
+export type ObjectRule<T extends Record<string, FieldType> = any> = {
+  __type: 'object'
+  type: {
+    [K in keyof T]: RuleType<T[K]>
+  }
+  obj: any
+}
+
+export type Infer<O extends ObjectRule, T = O['type']> = {
+  [K in keyof T]: T[K]
+}
+
 export type Translations = Record<string, Record<string, GetRuleError>>
 
-export type SchemaField =
-  | Rule
-  | Rule[]
-  | Each
-  | List
-  | SkipRulesIf
+export type FieldType = Rule | Rule[] | ObjectRule | Each | List | SkipRulesIf
 
-export type Schema<T = any> = T extends never
-  ? any
-  : {
-    [K in keyof T]?: T[K] extends Array<string | number | boolean>
-      ? Each
-      : (T[K] extends Array<any>
-        ? List<T[K]>
-        : (T[K] extends Record<string, any>
-          ? Schema<T[K]>
-          : Rule | Rule[] | SkipRulesIf))
-  }
-export type StrictSchema<T = any> = T extends never
-  ? any
-  : {
-    [K in keyof T]?: T[K] extends Array<string | number | boolean>
-      ? Each
-      : (T[K] extends Array<any>
-        ? List<T[K]>
-        : (T[K] extends Record<string, any>
-          ? Schema<T[K]>
-          : Rule | Rule[] | SkipRulesIf))
-  }
-
-export interface Each {
+export interface Each<T = any> {
+  type: T
   __type: 'each'
   __eachRules: Rule[] | Rule
   __rules?: Rule[] | Rule
 }
 export interface List<T = any> {
+  type: T
   __type: 'list'
   __rules?: Rule[] | Rule
-  __schema: Schema<T>
+  __schema: Record<string, Rule | Rule[] | ObjectRule | Each>
 }
-export interface SkipRulesIf {
+export interface SkipRulesIf<T = any, S = any> {
+  type: T
+  skipType: S
   __type: 'skip'
   __skip: (value: any) => boolean
   __rules: Rule[] | Rule
@@ -68,10 +76,11 @@ export type ExecuteRule = (
   language: string,
   accumulator: AnyObject,
 ) => void
-export type HandleSchema = <V = any>(
+
+export type HandleSchema = (
   props: {
-    schema: Schema
-    values: V
+    schema: any // Record<string, FieldType>
+    values: any
     language?: string
   },
   accumulator?: AnyObject,

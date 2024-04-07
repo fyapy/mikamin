@@ -1,13 +1,14 @@
-import { translations } from "../translations.js"
-import { Rule } from "../types.js"
-import { enumValues } from "../utils.js"
+import {translations} from '../translations.js'
+import {enumValues, types} from '../utils.js'
+import {Rule} from '../types.js'
 
-export const oneOf = (oneOfValues: any[] | any): Rule => {
+export const oneOf = <T>(oneOfValues: any[] | any): Rule<T> => {
   const values = !Array.isArray(oneOfValues)
     ? enumValues(oneOfValues)
     : oneOfValues
 
   return {
+    type: types.any as T,
     rule: 'oneOf',
     errorMessage: translations.oneOf,
     meta: {values},

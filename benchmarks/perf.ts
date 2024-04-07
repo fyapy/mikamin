@@ -1,16 +1,6 @@
-import { bench, run } from 'mitata'
-import { numeric, required, handleSchema } from '../src/index.js'
+import {run} from 'mitata'
 
-const schema = {
-  from: [required, numeric],
-  to: [required, numeric],
-}
+import './simpleSchemaInit.ts'
+import './simpleSchema.ts'
 
-bench('simple bool validate', () => {
-  handleSchema({
-    schema,
-    values: {},
-  })
-})
-
-await run()
+await run({percentiles: false, min_max: false})

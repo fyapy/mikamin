@@ -1,4 +1,14 @@
-import type { AnyObject, Rule } from './types.js'
+import type {AnyObject, Rule} from './types.js'
+
+export const types = {
+  any: 0 as any,
+  undefined: undefined,
+  string: String(),
+  number: Number(),
+  boolean: Boolean(),
+  array: [] as [],
+  null: null,
+}
 
 export const logErrorUnsupportedLanguage = (language: string) => {
   console.error(`Unsuppoerted language: ${language}`)
@@ -40,14 +50,12 @@ export function handleArrayLikeField(
   const errors = fileEachRule(_rules, name, value, language)
   if (errors) {
     if (!accumulator[name]) {
-      accumulator[name] = { ...errorBase }
+      accumulator[name] = {...errorBase}
     }
 
     accumulator[name].field = errors
   }
 }
-
-// const enumLength = (enm: any) => Object.keys(enm).map(value => Number(isNaN(Number(value)))).reduce((a, b) => a + b, 0)
 
 export const enumValues = <TEnum extends { [name: string]: any }>(
   value: TEnum,
@@ -60,11 +68,11 @@ export const enumValues = <TEnum extends { [name: string]: any }>(
     : values
 
   if (nullable) {
-    output.push(null);
+    output.push(null)
   }
 
-  return output as number[];
-};
+  return output as number[]
+}
 
 export const CYRILLIC_REGEXP = /[А-Яа-яёЁ]+/ig
 export const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/

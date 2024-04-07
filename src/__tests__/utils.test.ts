@@ -1,4 +1,5 @@
-import {enumValues} from '../src/utils'
+import {describe, test, expect} from 'vitest'
+import {enumValues} from '../utils.ts'
 
 describe('utils', () => {
   test('enumValues should convert enum with string values', () => {

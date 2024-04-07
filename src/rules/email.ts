@@ -1,8 +1,9 @@
-import { CYRILLIC_REGEXP, EMAIL_REGEXP, resetRegexpState } from "../utils.js"
-import { translations } from "../translations.js"
-import { Rule } from "../types.js"
+import {CYRILLIC_REGEXP, EMAIL_REGEXP, resetRegexpState, types} from '../utils.js'
+import {translations} from '../translations.js'
+import {Rule} from '../types.js'
 
-export const email: Rule = {
+export const email: Rule<string> = {
+  type: types.string,
   rule: 'email',
   errorMessage: translations.email,
   valid: email => {

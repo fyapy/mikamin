@@ -1,38 +1,18 @@
-import type { Rule, SkipRulesIf } from './types.js'
+import type {Rule, RuleType, SkipRulesIf} from './types.js'
+import {types} from './utils.js'
 
-type SkipFn = (rules: Rule[] | Rule) => SkipRulesIf
-
-export const nullable: SkipFn = rules => ({
+export const nullable = <R extends Rule[] | Rule, B = RuleType<R>>(rules: R): SkipRulesIf<B, null> => ({
+  type: types.any,
+  skipType: types.null,
   __type: 'skip',
   __skip: value => value === null,
   __rules: rules,
 })
-export const optional: SkipFn = rules => ({
+
+export const optional = <R extends Rule[] | Rule, B = RuleType<R>>(rules: R): SkipRulesIf<B, undefined> => ({
+  type: types.any,
+  skipType: types.undefined,
   __type: 'skip',
   __skip: value => typeof value === 'undefined',
   __rules: rules,
 })
-
-type PipeSkips = (...args: SkipFn[]) => (rules: Rule[] | Rule) => SkipRulesIf
-export const pipeSkips: PipeSkips = (...skips) => rules => {
-  const compitedSkipIfs = skips.reduce<SkipRulesIf[]>((acc, skip) => {
-    acc.push(skip(rules))
-    return acc
-  }, [])
-
-  const __skip: SkipRulesIf['__skip'] = value => {
-    for (const skip of compitedSkipIfs) {
-      if (skip.__skip(value)) {
-        return true
-      }
-    }
-
-    return false
-  }
-
-  return {
-    __type: 'skip',
-    __skip,
-    __rules: rules,
-  }
-}

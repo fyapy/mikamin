@@ -1,8 +1,9 @@
-import { translations } from "../translations.js"
-import { resetRegexpState } from "../utils.js"
-import { Rule } from "../types.js"
+import {resetRegexpState, types} from '../utils.js'
+import {translations} from '../translations.js'
+import {Rule} from '../types.js'
 
-export const regExp = (regexp: RegExp): Rule => ({
+export const regExp = (regexp: RegExp): Rule<string> => ({
+  type: types.string,
   rule: 'regExp',
   errorMessage: translations.regExp,
   meta: {regexp},

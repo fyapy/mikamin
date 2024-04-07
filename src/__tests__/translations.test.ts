@@ -1,8 +1,9 @@
+import {describe, test, expect} from 'vitest'
 import {
   bool,
   handleSchema,
   setTranslations,
-} from '../src'
+} from '../index.ts'
 
 describe('translations', () => {
   setTranslations({

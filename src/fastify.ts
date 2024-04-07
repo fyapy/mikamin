@@ -4,7 +4,7 @@ import type {
   RawRequestDefaultExpression,
   RawServerDefault,
 } from 'fastify'
-import { handleSchema } from "./index.js"
+import {handleSchema} from './index.js'
 
 
 export const inputHandler = <T = any>(schema: any, language = 'ru'): preHandlerHookHandler<RawServerDefault, RawRequestDefaultExpression, RawReplyDefaultExpression, { Body: T }> => (req, res, done) => {

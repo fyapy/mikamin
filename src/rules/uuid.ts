@@ -1,9 +1,10 @@
-import { UUID_V4_REGEXP, resetRegexpState } from "../utils.js"
-import { translations } from "../translations.js"
-import { Rule } from "../types.js"
+import {UUID_V4_REGEXP, resetRegexpState, types} from '../utils.js'
+import {translations} from '../translations.js'
+import {Rule} from '../types.js'
 
-export const uuid: Record<'v4', Rule> = {
+export const uuid: Record<'v4', Rule<string>> = {
   v4: {
+    type: types.string,
     rule: 'uuid',
     errorMessage: translations.uuid,
     valid: uuid => {

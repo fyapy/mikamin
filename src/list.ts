@@ -3,7 +3,7 @@ import type {
   AnyObject,
   HandleSchema,
 } from './types.js'
-import { handleArrayLikeField } from './utils.js'
+import {handleArrayLikeField} from './utils.js'
 
 const eachErrorBase = {
   __type: 'list',

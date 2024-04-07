@@ -1,17 +1,17 @@
 # Schema based validation library
 
-Zoply Schema lightweight schema builder for value parsing and synchronous validation.
+Mikamin lightweight schema builder for value parsing and synchronous validation.
 
 ## Getting Started
 
 ### Installation
 
 ```sh
-# Install with yarn
-yarn add zoply-schema
+# Install with pnpm
+pnpm add mikamin
 
 # Install with npm
-npm install zoply-schema --save
+npm install mikamin
 ```
 
 ### Usage
@@ -19,24 +19,7 @@ npm install zoply-schema --save
 You define and create schema objects. Schema objects are immutable, so each call of a method returns a new schema object.
 Basic schema definition:
 
-```ts
-import {
-  bool,
-  numeric,
-  required,
-  nullable,
-  requiredList,
-  each,
-  optional,
-  handleSchema,
-} from 'libs/vladik-schema'
-
-enum Gender {
-  Man = 0,
-  Woman = 1,
-}
-
-interface FeedSearch {
+<!-- interface FeedSearch {
   ids?: string[]
   genders: Gender[]
   cityId: number | null
@@ -46,18 +29,38 @@ interface FeedSearch {
     to: number
   }
   hasPhoto: boolean
+} -->
+
+```ts
+import {
+  bool,
+  each,
+  Infer,
+  string,
+  optional,
+  nullable,
+  stringNumber,
+  requiredList,
+  handleSchema,
+} from 'mikamin'
+
+enum Gender {
+  Man = 0,
+  Woman = 1,
 }
+
 const searchSchema = {
-  ids: each(required),
-  genders: each(required, requiredList),
-  cityId: nullable(required),
-  addiction: optional([required, numeric]),
+  ids: each(string),
+  genders: each(string, requiredList),
+  cityId: nullable(string),
+  addiction: optional(stringNumber),
   age: {
-    from: [required, numeric],
-    to: [required, numeric],
+    from: stringNumber,
+    to: stringNumber,
   },
   hasPhoto: bool,
 }
+type Search = type Schema = Infer<typeof searchSchema>
 
 // check validity
 const errors = handleSchema({
@@ -72,7 +75,7 @@ const hasError = Object.keys(errors).length != 0
 
 console.log(errors)
 // => {
-//   age: { from: 'from is required!', to: 'to is required!' },
+//   age: { from: 'from must be string!', to: 'to must be string!' },
 //   hasPhoto: 'hasPhoto must be boolean!'
 // }
 ```
@@ -86,8 +89,8 @@ const formatErrorMsg = (lang: Language): ErrorFormater => ({ rule, name, meta })
   const dictionary = dictionaries[lang]
 
   switch (rule) {
-    case 'required':
-      return dictionary.REQUIRED.replace('#name#', name)
+    case 'string':
+      return dictionary.STRING.replace('#name#', name)
     case 'requiredList':
       return dictionary.REQUIRED_LIST.replace('#name#', name)
     case 'optional':
@@ -120,7 +123,7 @@ const errors = handleSchema({
 ```ts
 type Validate<T> = preHandlerHookHandler<RawServerDefault, RawRequestDefaultExpression, RawReplyDefaultExpression, { Body: T }>
 
-export const zoplyValidate = (schema: any): Validate<any> => (req, res, done) => {
+export const mikaminValidate = (schema: any): Validate<any> => (req, res, done) => {
   req.lang = parseAcceptLanguage(req.headers['accept-language']!)
 
   const errors = handleSchema({
@@ -148,7 +151,7 @@ import * as input from './input'
 fastify.route<{ Body: input.Register }>({
   url: '/register',
   method: 'POST',
-  preHandler: zoplyValidate(input.registerSchema),
+  preHandler: mikaminValidate(input.registerSchema),
   handler: req => services.AuthService.register(req.body),
 })
 
@@ -159,8 +162,8 @@ export interface Register {
   password: string
 }
 export const registerSchema = {
-  username: required,
-  email: [required, email],
-  password: required,
+  username: string,
+  email: email,
+  password: string,
 }
 ```

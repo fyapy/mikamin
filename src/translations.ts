@@ -1,4 +1,4 @@
-import { Translations } from "./types.js";
+import {Translations} from './types.js'
 
 export const translations: Translations = {
   bool: {en: ({name}) => `${name} must be boolean!`},
@@ -12,7 +12,7 @@ export const translations: Translations = {
   oneOf: {en: ({name, meta}) => `${name} must be one of these values: ${meta.values.join(', ')}!`},
   optinalArray: {en: ({name}) => `${name} must be a array or not defined!`},
   regExp: {en: ({name, meta}) => `${name} must match ${meta.regexp} the regular expression!`},
-  required: {en: ({name}) => `${name} is required!`},
+  string: {en: ({name}) => `${name} must be string!`},
   requiredList: {en: ({name}) => `${name} must be a array, and not empty!`},
   noCyrillic: {en: ({name}) => `${name} must not contain Cyrillic characters!`},
   ip: {en: ({name}) => `${name} must be IP address!`},

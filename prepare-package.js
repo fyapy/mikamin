@@ -2,13 +2,14 @@ import fs from 'fs/promises'
 import fsSync from 'fs'
 import path from 'path'
 
-const buildDir = './build'
+const buildDir = '/dist'
 
 async function createEsmModulePackageJson() {
-  const dirs = await fs.readdir(buildDir)
+  console.log('Start prepare script')
+  const dirs = await fs.readdir(`.${buildDir}`)
   dirs.forEach(dir => {
     if (dir === 'esm') {
-      const packageJsonFile = path.join(buildDir, dir, '/package.json')
+      const packageJsonFile = path.join(`.${buildDir}`, dir, '/package.json')
       if (!fsSync.existsSync(packageJsonFile)) {
         fs.writeFile(
           packageJsonFile,
@@ -26,15 +27,17 @@ async function createEsmModulePackageJson() {
   delete packageJson.files
   delete packageJson.scripts
   delete packageJson.devDependencies
-  packageJson.main = packageJson.main.replace('/build', '')
-  packageJson.types = packageJson.types.replace('/build', '')
-  packageJson.module = packageJson.module.replace('/build', '')
+  packageJson.main = packageJson.main.replace(buildDir, '')
+  packageJson.types = packageJson.types.replace(buildDir, '')
+  packageJson.module = packageJson.module.replace(buildDir, '')
 
-  const newPackageJsonPath = path.join(buildDir, '/package.json')
+  const newPackageJsonPath = path.join(`.${buildDir}`, '/package.json')
   await fs.writeFile(newPackageJsonPath, JSON.stringify(packageJson))
 
 
-  await fs.copyFile('./readme.md', './build/readme.md')
+  await fs.copyFile('./readme.md', `.${buildDir}/readme.md`)
+  await fs.unlink(`.${buildDir}/index.d.cts`)
+  console.log('Prepare script finished')
 }
 
 createEsmModulePackageJson()

@@ -1,8 +1,9 @@
-import { translations } from "../translations.js"
-import { CYRILLIC_REGEXP, resetRegexpState } from "../utils.js"
-import { Rule } from "../types.js"
+import {CYRILLIC_REGEXP, resetRegexpState, types} from '../utils.js'
+import {translations} from '../translations.js'
+import {Rule} from '../types.js'
 
-export const noCyrillic: Rule = {
+export const noCyrillic: Rule<string> = {
+  type: types.string,
   rule: 'noCyrillic',
   errorMessage: translations.noCyrillic,
   valid: text => {
