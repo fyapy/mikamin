@@ -25,6 +25,7 @@ import {
   each,
   Infer,
   oneOf,
+  object,
   string,
   optional,
   nullable,
@@ -43,10 +44,10 @@ const searchSchema = {
   genders: each(oneOf(Gender)),
   cityId: nullable(string),
   addiction: optional(stringNumber),
-  age: {
+  age: object({
     from: stringNumber,
     to: stringNumber,
-  },
+  }),
   hasPhoto: bool,
 }
 
