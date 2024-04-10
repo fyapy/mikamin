@@ -24,23 +24,23 @@ import {
   bool,
   each,
   Infer,
+  oneOf,
   string,
   optional,
   nullable,
   stringNumber,
-  requiredList,
   handleSchema,
 } from 'mikamin'
 
 enum Gender {
-  Man = 0,
-  Woman = 1,
+  Woman,
+  Man,
 }
 
 type Search = Infer<typeof searchSchema>
 const searchSchema = {
   ids: each(string),
-  genders: each(string, requiredList),
+  genders: each(oneOf(Gender)),
   cityId: nullable(string),
   addiction: optional(stringNumber),
   age: {
@@ -144,11 +144,7 @@ fastify.route<{ Body: input.Register }>({
 })
 
 // input.ts
-export interface Register {
-  username: string
-  email: string
-  password: string
-}
+export type Register = Infer<typeof registerSchema>
 export const registerSchema = {
   username: string,
   email: email,

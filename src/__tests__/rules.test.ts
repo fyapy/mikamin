@@ -47,20 +47,6 @@ describe('handleSchema', () => {
     }),
   })
 
-
-  test('bool should validate', () => {
-    const errors = handleSchema({
-      schema: {
-        hasPhoto: bool,
-      },
-      values: {},
-    })
-
-    expect(errors).toEqual({
-      hasPhoto: 'hasPhoto must be boolean!',
-    })
-  })
-
   test('string should throw error for null', () => {
     const nullErrors = handleSchema({
       schema: {

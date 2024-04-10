@@ -3,14 +3,17 @@ import {
   bool,
   handleSchema,
   setTranslations,
+  translations,
 } from '../index.ts'
 
 describe('translations', () => {
-  setTranslations({
-    bool: {en: ({name}) => `${name} must be custom boolean errorMessage!`},
-  })
-
   test('bool should have custom error message', () => {
+    const defaultBoolTranslation = translations.bool.en
+
+    setTranslations({
+      bool: {en: ({name}) => `${name} must be custom boolean errorMessage!`},
+    })
+
     const errors = handleSchema({
       schema: {
         hasPhoto: bool,
@@ -18,16 +21,18 @@ describe('translations', () => {
       values: {},
     })
 
+    setTranslations({bool: {en: defaultBoolTranslation}})
+
     expect(errors).toEqual({
       hasPhoto: 'hasPhoto must be custom boolean errorMessage!',
     })
   })
 
-  setTranslations({
-    bool: {ru: ({name}) => `${name} должно быть истинной или ложью!`},
-  })
-
   test('bool should have custom error message for other languages', () => {
+    setTranslations({
+      bool: {ru: ({name}) => `${name} должно быть истинной или ложью!`},
+    })
+
     const errors = handleSchema({
       schema: {
         hasPhoto: bool,
