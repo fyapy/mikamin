@@ -1,5 +1,5 @@
 import type {Rule, RuleType, SkipRulesIf} from './types.js'
-import {types} from './utils.js'
+import {types} from './constants.js'
 
 export const nullable = <R extends Rule[] | Rule, B = RuleType<R>>(rules: R): SkipRulesIf<B, null> => ({
   type: types.any,

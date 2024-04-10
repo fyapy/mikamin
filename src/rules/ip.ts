@@ -1,5 +1,6 @@
-import {IP_REGEXP, resetRegexpState, types} from '../utils.js'
+import {IP_REGEXP, resetRegexpState} from '../utils.js'
 import {translations} from '../translations.js'
+import {types} from '../constants.js'
 import {Rule} from '../types.js'
 
 export const ip: Rule<string> = {

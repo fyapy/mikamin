@@ -1,5 +1,6 @@
 import {translations} from '../translations.js'
-import {enumValues, types} from '../utils.js'
+import {enumValues} from '../utils.js'
+import {types} from '../constants.js'
 import {Rule} from '../types.js'
 
 export const oneOf = <T>(oneOfValues: any[] | any): Rule<T> => {

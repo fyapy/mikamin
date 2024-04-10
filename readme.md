@@ -19,18 +19,6 @@ npm install mikamin
 You define and create schema objects. Schema objects are immutable, so each call of a method returns a new schema object.
 Basic schema definition:
 
-<!-- interface FeedSearch {
-  ids?: string[]
-  genders: Gender[]
-  cityId: number | null
-  addiction?: number
-  age: {
-    from: number
-    to: number
-  }
-  hasPhoto: boolean
-} -->
-
 ```ts
 import {
   bool,
@@ -49,6 +37,7 @@ enum Gender {
   Woman = 1,
 }
 
+type Search = Infer<typeof searchSchema>
 const searchSchema = {
   ids: each(string),
   genders: each(string, requiredList),
@@ -60,7 +49,6 @@ const searchSchema = {
   },
   hasPhoto: bool,
 }
-type Search = type Schema = Infer<typeof searchSchema>
 
 // check validity
 const errors = handleSchema({

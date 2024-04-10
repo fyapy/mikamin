@@ -30,6 +30,7 @@ describe('handleSchema', () => {
     value: string,
   })
   
+  type Schema = Infer<typeof schema>
   const schema = object({
     rile,
     rileList,
@@ -45,8 +46,6 @@ describe('handleSchema', () => {
       }),
     }),
   })
-  
-  type Schema = Infer<typeof schema>
 
 
   test('bool should validate', () => {
@@ -91,18 +90,18 @@ describe('handleSchema', () => {
     })
   })
 
-  // test('nullable should skip validation for null value', () => {
-  //   const errors = handleSchema({
-  //     schema: {
-  //       cityId: nullable(string),
-  //     },
-  //     values: {
-  //       cityId: null,
-  //     },
-  //   })
+  test('nullable should skip validation for null value', () => {
+    const errors = handleSchema({
+      schema: {
+        cityId: nullable(string),
+      },
+      values: {
+        cityId: null,
+      },
+    })
 
-  //   expect(errors).toEqual({})
-  // })
+    expect(errors).toEqual({})
+  })
 
   test('each should validate values in list', () => {
     const errors = handleSchema({

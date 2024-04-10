@@ -1,5 +1,6 @@
-import {resetRegexpState, types} from '../utils.js'
+import {resetRegexpState} from '../utils.js'
 import {translations} from '../translations.js'
+import {types} from '../constants.js'
 import {Rule} from '../types.js'
 
 export const regExp = (regexp: RegExp): Rule<string> => ({

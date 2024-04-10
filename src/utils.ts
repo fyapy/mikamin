@@ -1,14 +1,5 @@
 import type {AnyObject, Rule} from './types.js'
-
-export const types = {
-  any: 0 as any,
-  undefined: undefined,
-  string: String(),
-  number: Number(),
-  boolean: Boolean(),
-  array: [] as [],
-  null: null,
-}
+import {array} from './rules/array.js'
 
 export const logErrorUnsupportedLanguage = (language: string) => {
   console.error(`Unsuppoerted language: ${language}`)
@@ -43,9 +34,9 @@ export function handleArrayLikeField(
   accumulator: AnyObject,
   errorBase: AnyObject,
 ) {
-  if (typeof rules === 'undefined') return
-
-  const _rules = normalizeRules(rules)
+  const _rules = typeof rules === 'undefined'
+    ? [array]
+    : normalizeRules(rules)
 
   const errors = fileEachRule(_rules, name, value, language)
   if (errors) {

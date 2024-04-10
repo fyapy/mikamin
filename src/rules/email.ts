@@ -1,5 +1,6 @@
-import {CYRILLIC_REGEXP, EMAIL_REGEXP, resetRegexpState, types} from '../utils.js'
+import {CYRILLIC_REGEXP, EMAIL_REGEXP, resetRegexpState} from '../utils.js'
 import {translations} from '../translations.js'
+import {types} from '../constants.js'
 import {Rule} from '../types.js'
 
 export const email: Rule<string> = {

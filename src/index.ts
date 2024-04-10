@@ -10,7 +10,8 @@ import type {
 } from './types.js'
 import {handleEach} from './each.js'
 import {handleList} from './list.js'
-import {logErrorUnsupportedLanguage, types} from './utils.js'
+import {types} from './constants.js'
+import {logErrorUnsupportedLanguage} from './utils.js'
 
 export {inputHandler} from './fastify.js'
 export {setTranslations, translations} from './translations.js'
