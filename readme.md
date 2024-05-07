@@ -25,7 +25,6 @@ import {
   each,
   Infer,
   oneOf,
-  object,
   string,
   optional,
   nullable,
