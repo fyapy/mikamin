@@ -6,7 +6,6 @@ import type {
   ObjectRule,
   ExecuteRule,
   HandleSchema,
-  FieldType,
 } from './types.js'
 import {handleEach} from './each.js'
 import {handleList} from './list.js'
@@ -34,14 +33,6 @@ export {requiredList} from './rules/requiredList.js'
 export {noCyrillic} from './rules/noCyrillic.js'
 export {ip} from './rules/ip.js'
 export {uuid} from './rules/uuid.js'
-
-export const object = <
-  T extends Record<string, FieldType>
->(obj: T): ObjectRule<T> => ({
-  __type: 'object',
-  type: types.any,
-  obj,
-})
 
 export const list = <
   T extends Record<string, Rule | Rule[] | ObjectRule | Each> = any,

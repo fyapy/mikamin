@@ -44,10 +44,10 @@ const searchSchema = {
   genders: each(oneOf(Gender)),
   cityId: nullable(string),
   addiction: optional(stringNumber),
-  age: object({
+  age: {
     from: stringNumber,
     to: stringNumber,
-  }),
+  },
   hasPhoto: bool,
 }
 

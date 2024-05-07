@@ -10,7 +10,6 @@ import {
   requiredList,
   handleSchema,
   Infer,
-  object,
   number,
   nullable,
   list,
@@ -21,31 +20,31 @@ describe('handleSchema', () => {
   const rile = string
   const rileList = [string, number]
   const name2 = optional(string)
-  
+
   const each1 = each(string)
   const each2 = each([string, number])
-  
+
   const list1 = list({
     key: string,
     value: string,
   })
-  
+
   type Schema = Infer<typeof schema>
-  const schema = object({
+  const schema = {
     rile,
     rileList,
     list1,
     each1,
     each2,
-    user: object({
+    user: {
       name: string,
       name2,
       isOld: nullable(bool),
-      parent: object({
+      parent: {
         year: number,
-      }),
-    }),
-  })
+      },
+    },
+  }
 
   test('string should throw error for null', () => {
     const nullErrors = handleSchema({

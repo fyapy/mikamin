@@ -1,6 +1,6 @@
 {
   "name": "mikamin",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "description": "validation schema",
   "author": "Amir Abdullin",
   "license": "MIT",
@@ -11,7 +11,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "test": "vitest run",
-    "bench": "ts-node --esm ./benchmarks/perf.ts",
+    "bench": "tsx ./benchmarks/perf.ts",
     "build": "tsup && node prepare-package.js",
     "publish-package": "cd dist && npm publish"
   },
@@ -26,8 +26,8 @@
     "eslint": "^8.57.0",
     "jsdom": "^24.0.0",
     "mitata": "0.1.11",
-    "ts-node": "10.9.2",
     "tsup": "^8.0.2",
+    "tsx": "^4.9.3",
     "typescript": "5.4.4",
     "typescript-eslint": "^7.5.0",
     "vite": "^5.2.8",

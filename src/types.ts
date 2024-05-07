@@ -25,22 +25,16 @@ export type RuleType<R extends FieldType> = R extends Rule
     : R extends SkipRulesIf
       ? R['skipType'] | R['type']
       : R extends ObjectRule
-        ? R['type']
+        ? {[K in keyof R]: RuleType<R[K]>}
         : R extends Each<infer E>
           ? E
           : R extends List<infer E>
             ? E
             : never
 
-export type ObjectRule<T extends Record<string, FieldType> = any> = {
-  __type: 'object'
-  type: {
-    [K in keyof T]: RuleType<T[K]>
-  }
-  obj: any
-}
+export interface ObjectRule extends Record<string, FieldType> {}
 
-export type Infer<O extends ObjectRule, T = O['type']> = {
+export type Infer<O extends ObjectRule, T = {[K in keyof O]: RuleType<O[K]>}> = {
   [K in keyof T]: T[K]
 }
 
