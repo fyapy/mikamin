@@ -1,6 +1,5 @@
 import {z} from 'zod'
 import joi from 'joi'
-import {d} from 'desy'
 import * as yup from 'yup'
 import {bench, group} from 'mitata'
 import {stringNumber, handleSchema} from '../src/index.js'
@@ -30,14 +29,6 @@ group('simple schema', () => {
 
   bench('zod', () => {
     zodSimpleSchema.safeParse({})
-  })
-
-  const desySimpleSchema = d.object({
-    from: d.number().int(),
-  })
-
-  bench('desy', () => {
-    desySimpleSchema.validate({})
   })
 
   const mikaminSimpleSchema = {
