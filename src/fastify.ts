@@ -7,7 +7,7 @@ import type {
 import {handleSchema} from './index.js'
 
 
-export const inputHandler = <T = any>(schema: any, language = 'ru'): preHandlerHookHandler<RawServerDefault, RawRequestDefaultExpression, RawReplyDefaultExpression, { Body: T }> => (req, res, done) => {
+export const inputHandler = <T = any>(schema: any, language = 'en'): preHandlerHookHandler<RawServerDefault, RawRequestDefaultExpression, RawReplyDefaultExpression, { Body: T }> => (req, res, done) => {
   if (typeof req.body === 'undefined') {
     return res.status(400).send({message: 'Invalid body'})
   }
