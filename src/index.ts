@@ -35,7 +35,7 @@ export {ip} from './rules/ip.js'
 export {uuid} from './rules/uuid.js'
 
 export const list = <
-  T extends Record<string, Rule | Rule[] | ObjectRule | Each> = any,
+  T extends Record<string, Rule | Rule[] | ObjectRule | Each | List> = any,
   B = {
     [K in keyof T]: RuleType<T[K]>
   }
