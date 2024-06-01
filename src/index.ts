@@ -6,6 +6,7 @@ import type {
   ObjectRule,
   ExecuteRule,
   HandleSchema,
+  SkipRulesIf,
 } from './types.js'
 import {handleEach} from './each.js'
 import {handleList} from './list.js'
@@ -35,7 +36,7 @@ export {ip} from './rules/ip.js'
 export {uuid} from './rules/uuid.js'
 
 export const list = <
-  T extends Record<string, Rule | Rule[] | ObjectRule | Each | List> = any,
+  T extends Record<string, Rule | Rule[] | ObjectRule | Each | List | SkipRulesIf> = any,
   B = {
     [K in keyof T]: RuleType<T[K]>
   }

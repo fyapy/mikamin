@@ -1,5 +1,5 @@
 import {describe, test, expect} from 'vitest'
-import {each, handleSchema, list, string} from '../index'
+import {handleSchema, list, string} from '../index'
 
 describe('each', () => {
   test('list should be required by default', () => {
@@ -7,7 +7,7 @@ describe('each', () => {
       schema: {ids: list({id: string})},
       values: {},
     })
-  
+
     expect(errors).toEqual({
       ids: {
         __type: 'list',
@@ -21,7 +21,7 @@ describe('each', () => {
       schema: {ids: list({id: string})},
       values: {ids: []},
     })
-  
+
     expect(errors).toEqual({})
   })
 })
