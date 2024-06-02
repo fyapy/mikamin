@@ -17,6 +17,7 @@ export const translations: Translations = {
   noCyrillic: {en: ({name}) => `${name} must not contain Cyrillic characters!`},
   ip: {en: ({name}) => `${name} must be IP address!`},
   uuid: {en: ({name}) => `${name} must be UUID!`},
+  json: {en: ({name}) => `${name} must be JSON!`},
 }
 
 export const setTranslations = (newTranslations: Translations) => {

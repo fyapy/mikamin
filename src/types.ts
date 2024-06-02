@@ -52,7 +52,7 @@ export interface List<T = any> {
   type: T
   __type: 'list'
   __rules?: Rule[] | Rule
-  __schema: Record<string, Rule | Rule[] | ObjectRule | Each | List | SkipRulesIf>
+  __schema: Record<string, FieldType>
 }
 export interface SkipRulesIf<T = any, S = any> {
   type: T

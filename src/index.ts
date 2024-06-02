@@ -3,10 +3,8 @@ import type {
   Rule,
   List,
   RuleType,
-  ObjectRule,
   ExecuteRule,
   HandleSchema,
-  SkipRulesIf,
 } from './types.js'
 import {handleEach} from './each.js'
 import {handleList} from './list.js'
@@ -34,9 +32,10 @@ export {requiredList} from './rules/requiredList.js'
 export {noCyrillic} from './rules/noCyrillic.js'
 export {ip} from './rules/ip.js'
 export {uuid} from './rules/uuid.js'
+export {json, jsonString} from './rules/json.js'
 
 export const list = <
-  T extends Record<string, Rule | Rule[] | ObjectRule | Each | List | SkipRulesIf> = any,
+  T extends List['__schema'] = any,
   B = {
     [K in keyof T]: RuleType<T[K]>
   }
@@ -48,7 +47,7 @@ export const list = <
 })
 
 export const each = <
-  T extends Rule[] | Rule,
+  T extends Each['__eachRules'],
   B = RuleType<T>
 >(eachRules: T, rules?: Rule[] | Rule): Each<B> => ({
   type: types.any as B,
