@@ -1,7 +1,13 @@
 import {defaultLanguage} from './translations'
-import {handleSchema} from './index.js'
+import {handleSchema, mikaminStringify} from './index.js'
 
-export const mikaminHandler = (schema: any, language = defaultLanguage) => (req: any, res: any, done: any) => {
+type Formatter = 'errors' | 'message'
+
+export const mikaminHandler = (
+  schema: any,
+  formatter: Formatter = 'message',
+  language = defaultLanguage,
+) => (req: any, res: any, done: any) => {
   if (typeof req.body === 'undefined') {
     return res.status(400).send({message: 'Invalid body'})
   }
@@ -13,6 +19,10 @@ export const mikaminHandler = (schema: any, language = defaultLanguage) => (req:
   })
 
   if (Object.keys(errors).length !== 0) {
+    if (formatter === 'message') {
+      return res.status(400).send({message: mikaminStringify(errors)})
+    }
+
     return res.status(400).send({errors})
   }
 
