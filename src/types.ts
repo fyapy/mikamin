@@ -42,22 +42,28 @@ export type Translations = Record<string, Record<string, GetRuleError>>
 
 export type FieldType = Rule | Rule[] | ObjectRule | Each | List | SkipRulesIf
 
+export enum Types {
+  Each = 'each',
+  List = 'list',
+  Skip = 'skip',
+}
+
 export interface Each<T = any> {
   type: T
-  __type: 'each'
+  __type: Types.Each
   __eachRules: Rule[] | Rule
   __rules?: Rule[] | Rule
 }
 export interface List<T = any> {
   type: T
-  __type: 'list'
+  __type: Types.List
   __rules?: Rule[] | Rule
   __schema: Record<string, FieldType>
 }
 export interface SkipRulesIf<T = any, S = any> {
   type: T
   skipType: S
-  __type: 'skip'
+  __type: Types.Skip
   __skip: (value: any) => boolean
   __rules: Rule[] | Rule
 }

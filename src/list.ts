@@ -1,12 +1,8 @@
-import type {
-  List,
-  AnyObject,
-  HandleSchema,
-} from './types.js'
+import {type List, type AnyObject, type HandleSchema, Types} from './types.js'
 import {handleArrayLikeField} from './utils.js'
 
 const eachErrorBase = {
-  __type: 'list',
+  __type: Types.List,
 }
 export function handleList(
   list: List,

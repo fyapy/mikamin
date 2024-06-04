@@ -3,7 +3,7 @@ import {enumValues} from '../utils.js'
 import {types} from '../constants.js'
 import {Rule} from '../types.js'
 
-export const oneOf = <T>(oneOfValues: T | T[]): Rule<T> => {
+export const oneOf = <T>(oneOfValues: any): Rule<T> => {
   const values = !Array.isArray(oneOfValues)
     ? enumValues(oneOfValues as any)
     : oneOfValues

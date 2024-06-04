@@ -1,5 +1,7 @@
 import {Translations} from './types.js'
 
+export const defaultLanguage = 'en'
+
 export const translations: Translations = {
   bool: {en: ({name}) => `${name} must be boolean!`},
   array: {en: ({name}) => `${name} must be a array!`},

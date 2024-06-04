@@ -109,9 +109,9 @@ const errors = handleSchema({
 ### Fastify integration
 
 ```ts
-type Validate<T> = preHandlerHookHandler<RawServerDefault, RawRequestDefaultExpression, RawReplyDefaultExpression, { Body: T }>
+type Validate<T> = preHandlerHookHandler<RawServerDefault, RawRequestDefaultExpression, RawReplyDefaultExpression, {Body: T}>
 
-export const mikaminValidate = (schema: any): Validate<any> => (req, res, done) => {
+export const mikaminHandler = (schema: any): Validate<any> => (req, res, done) => {
   req.lang = parseAcceptLanguage(req.headers['accept-language']!)
 
   const errors = handleSchema({
@@ -121,9 +121,7 @@ export const mikaminValidate = (schema: any): Validate<any> => (req, res, done) 
   })
 
   if (Object.keys(errors).length != 0) {
-    return res.status(400).send({
-      errors,
-    })
+    return res.status(400).send({errors})
   }
 
   done()
@@ -136,10 +134,10 @@ And use it in handler:
 // handler.ts
 import * as input from './input'
 
-fastify.route<{ Body: input.Register }>({
+fastify.route<{Body: input.Register}>({
   url: '/register',
   method: 'POST',
-  preHandler: mikaminValidate(input.registerSchema),
+  preHandler: mikaminHandler(input.registerSchema),
   handler: req => services.AuthService.register(req.body),
 })
 

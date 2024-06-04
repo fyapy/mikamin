@@ -1,11 +1,8 @@
-import type {
-  Each,
-  AnyObject,
-} from './types.js'
+import {type Each, type AnyObject, Types} from './types.js'
 import {fileEachRule, handleArrayLikeField, normalizeRules} from './utils.js'
 
 const eachErrorBase = {
-  __type: 'each',
+  __type: Types.Each,
 }
 export function handleEach(
   each: Each,

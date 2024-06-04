@@ -1,21 +1,15 @@
-import type {
-  preHandlerHookHandler,
-  RawReplyDefaultExpression,
-  RawRequestDefaultExpression,
-  RawServerDefault,
-} from 'fastify'
+import {defaultLanguage} from './translations'
 import {handleSchema} from './index.js'
 
-
-export const inputHandler = <T = any>(schema: any, language = 'en'): preHandlerHookHandler<RawServerDefault, RawRequestDefaultExpression, RawReplyDefaultExpression, { Body: T }> => (req, res, done) => {
+export const mikaminHandler = (schema: any, language = defaultLanguage) => (req: any, res: any, done: any) => {
   if (typeof req.body === 'undefined') {
     return res.status(400).send({message: 'Invalid body'})
   }
 
   const errors = handleSchema({
-    schema,
     values: req.body,
     language,
+    schema,
   })
 
   if (Object.keys(errors).length !== 0) {

@@ -1,5 +1,5 @@
 import {describe, test, expect} from 'vitest'
-import {oneOf, handleSchema, string} from '../../index'
+import {oneOf, handleSchema} from '../../index'
 
 describe('oneOf', () => {
   test('oneOf should validate', () => {

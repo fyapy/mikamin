@@ -1,17 +1,21 @@
-import type {
-  Each,
-  Rule,
-  List,
-  RuleType,
-  ExecuteRule,
-  HandleSchema,
+import {
+  type Each,
+  type Rule,
+  type List,
+  type RuleType,
+  type ExecuteRule,
+  type HandleSchema,
+  Types,
 } from './types.js'
 import {handleEach} from './each.js'
 import {handleList} from './list.js'
 import {types} from './constants.js'
 import {logErrorUnsupportedLanguage} from './utils.js'
+import {defaultLanguage} from './translations.js'
 
-export {inputHandler} from './fastify.js'
+export {mikaminHandler} from './fastify.js'
+export {mikaminStringify} from './stringify.js'
+export {mikaminResolver} from './react-hook-form.js'
 export {setTranslations, translations} from './translations.js'
 export * from './skips.js'
 export * from './types.js'
@@ -41,7 +45,7 @@ export const list = <
   }
 >(obj: T, rules?: Rule[] | Rule): List<B[]> => ({
   type: types.any,
-  __type: 'list',
+  __type: Types.List,
   __rules: rules,
   __schema: obj,
 })
@@ -51,7 +55,7 @@ export const each = <
   B = RuleType<T>
 >(eachRules: T, rules?: Rule[] | Rule): Each<B> => ({
   type: types.any as B,
-  __type: 'each',
+  __type: Types.Each,
   __rules: rules,
   __eachRules: eachRules,
 })
@@ -87,7 +91,6 @@ const executeRules: ExecuteRule = (
   }
 }
 
-const defaultLanguage = 'en'
 export const handleSchema: HandleSchema = (
   {
     schema,
@@ -103,18 +106,18 @@ export const handleSchema: HandleSchema = (
     if (
       Array.isArray(fns)
       || typeof fns?.valid === 'function'
-      || fns?.__type === 'skip'
+      || fns?.__type === Types.Skip
     ) {
-      if (fns?.__type === 'skip') {
+      if (fns?.__type === Types.Skip) {
         if (!fns.__skip(value)) {
           executeRules(fns.__rules, name, value, language, accumulator)
         }
       } else {
         executeRules(fns, name, value, language, accumulator)
       }
-    } else if (fns['__type'] === 'each') {
+    } else if (fns['__type'] === Types.Each) {
       handleEach(fns, name, value, language, accumulator)
-    } else if (fns['__type'] === 'list') {
+    } else if (fns['__type'] === Types.List) {
       handleList(fns, name, value, language, accumulator, handleSchema)
     } else if (typeof fns === 'object') {
       // handle object
