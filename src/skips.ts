@@ -1,7 +1,8 @@
-import {Types, type Rule, type RuleType, type SkipRulesIf} from './types.js'
+import {Types, type Rule, type SkipRulesIf} from './types.js'
 import {types} from './constants.js'
 
-export const nullable = <R extends Rule[] | Rule, B = RuleType<R>>(rules: R): SkipRulesIf<B, null> => ({
+// or extends Rule | Rule[]
+export const nullable = <R extends Rule>(rules: R): SkipRulesIf<R['type'], null> => ({
   type: types.any,
   skipType: types.null,
   __type: Types.Skip,
@@ -9,7 +10,8 @@ export const nullable = <R extends Rule[] | Rule, B = RuleType<R>>(rules: R): Sk
   __rules: rules,
 })
 
-export const optional = <R extends Rule[] | Rule, B = RuleType<R>>(rules: R): SkipRulesIf<B, undefined> => ({
+// or extends Rule | Rule[]
+export const optional = <R extends Rule>(rules: R): SkipRulesIf<R['type'], undefined> => ({
   type: types.any,
   skipType: types.undefined,
   __type: Types.Skip,

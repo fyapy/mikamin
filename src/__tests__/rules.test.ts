@@ -18,14 +18,14 @@ import {
 
 describe('handleSchema', () => {
   const rile = string
-  const rileList = [string, number]
+  const rileList = stringNumber
   const name2 = optional(string)
 
   const each1 = each(string)
-  const each2 = each([string, number])
+  const each2 = each(stringNumber)
 
   const list1 = list({
-    key: string,
+    key: optional(string),
     value: string,
   })
 
@@ -44,6 +44,12 @@ describe('handleSchema', () => {
         year: number,
       },
     },
+  }
+
+  type Schema2 = Infer<typeof schema2>
+  const schema2 = {
+    key: optional(string),
+    valueId: string,
   }
 
   test('string should throw error for null', () => {
