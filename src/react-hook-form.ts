@@ -13,26 +13,24 @@ function iterateErrors(errorList: AnyObject, errors: AnyObject) {
       const error = errorList[prop]
 
       if (typeof error === 'object' && error !== null) {
-        if (error.__type === Types.Each) {
-          if (typeof errors[prop] === 'undefined') {
-            errors[prop] = []
-          }
-
-          error.inner.forEach((innerError: any, index: number) => {
-            errors[prop][index] = innerError
-          })
-        } else if (error.__type === Types.List) {
+        if (error.__type === Types.List) {
           if (Array.isArray(error.inner)) {
             if (typeof errors[prop] === 'undefined') {
               errors[prop] = []
             }
 
             error.inner.forEach((innerError: any, index: number) => {
-              if (typeof errors[prop][index] === 'undefined') {
-                errors[prop][index] = {}
-              }
+              if (typeof innerError === 'string') {
+                errors[prop][index] = innerError
+              } else if (innerError !== null) {
+                if (typeof errors[prop][index] === 'undefined') {
+                  errors[prop][index] = {}
+                }
 
-              iterateErrors(innerError, errors[prop][index])
+                iterateErrors(innerError, errors[prop][index])
+              } else {
+                errors[prop][index] = null
+              }
             })
           } else {
             errors[prop] = error.field

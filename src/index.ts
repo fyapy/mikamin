@@ -1,13 +1,12 @@
 import {
-  type Each,
   type Rule,
   type List,
   type RuleType,
+  type FieldType,
   type ExecuteRule,
   type HandleSchema,
   Types,
 } from './types.js'
-import {handleEach} from './each.js'
 import {handleList} from './list.js'
 import {types} from './constants.js'
 import {logErrorUnsupportedLanguage} from './utils.js'
@@ -41,25 +40,15 @@ export {uuid} from './rules/uuid.js'
 export {json, jsonString} from './rules/json.js'
 
 export const list = <
-  T extends List['__schema'] = any,
-  B = {
-    [K in keyof T]: RuleType<T[K]>
-  }
+  T extends List['__schema'],
+  B = T extends Record<string, FieldType>
+    ? {[K in keyof T]: RuleType<T[K]>}
+    : RuleType<T>
 >(obj: T, rules?: Rule[] | Rule): List<B[]> => ({
   type: types.any,
   __type: Types.List,
   __rules: rules,
   __schema: obj,
-})
-
-export const each = <
-  T extends Each['__eachRules'],
-  B = RuleType<T>
->(eachRules: T, rules?: Rule[] | Rule): Each<B> => ({
-  type: types.any as B,
-  __type: Types.Each,
-  __rules: rules,
-  __eachRules: eachRules,
 })
 
 const executeRules: ExecuteRule = (
@@ -117,8 +106,6 @@ export const handleSchema: HandleSchema = (
       } else {
         executeRules(fns, name, value, language, accumulator)
       }
-    } else if (fns['__type'] === Types.Each) {
-      handleEach(fns, name, value, language, accumulator)
     } else if (fns['__type'] === Types.List) {
       handleList(fns, name, value, language, accumulator, handleSchema)
     } else if (typeof fns === 'object') {

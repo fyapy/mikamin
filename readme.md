@@ -22,7 +22,6 @@ Basic schema definition:
 ```ts
 import {
   bool,
-  each,
   Infer,
   oneOf,
   string,
@@ -39,8 +38,8 @@ enum Gender {
 
 type Search = Infer<typeof searchSchema>
 const searchSchema = {
-  ids: each(string),
-  genders: each(oneOf(Gender)),
+  ids: list(string),
+  genders: list(oneOf(Gender)),
   cityId: nullable(string),
   addiction: optional(stringNumber),
   age: {

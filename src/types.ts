@@ -26,11 +26,9 @@ export type RuleType<R extends FieldType> = R extends Rule
       ? R['skipType'] | R['type']
       : R extends ObjectRule
         ? {[K in keyof R]: RuleType<R[K]>}
-        : R extends Each<infer E>
+        : R extends List<infer E>
           ? E
-          : R extends List<infer E>
-            ? E
-            : never
+          : never
 
 export interface ObjectRule extends Record<string, FieldType> {}
 
@@ -40,25 +38,18 @@ export type Infer<O extends ObjectRule, T = {[K in keyof O]: RuleType<O[K]>}> = 
 
 export type Translations = Record<string, Record<string, GetRuleError>>
 
-export type FieldType = Rule | Rule[] | ObjectRule | Each | List | SkipRulesIf
+export type FieldType = Rule | Rule[] | ObjectRule | List | SkipRulesIf
 
 export enum Types {
-  Each = 'each',
   List = 'list',
   Skip = 'skip',
 }
 
-export interface Each<T = any> {
-  type: T
-  __type: Types.Each
-  __eachRules: Rule[] | Rule
-  __rules?: Rule[] | Rule
-}
 export interface List<T = any> {
   type: T
   __type: Types.List
   __rules?: Rule[] | Rule
-  __schema: Record<string, FieldType>
+  __schema: Record<string, FieldType> | Rule[] | Rule
 }
 export interface SkipRulesIf<T = any, S = any> {
   type: T

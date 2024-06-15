@@ -1,5 +1,5 @@
 import {describe, test, expect} from 'vitest'
-import {each, jsonString, list, mikaminResolver, number, oneOf, string} from '../index.ts'
+import {jsonString, list, mikaminResolver, number, oneOf, string} from '../index.ts'
 
 describe('react-hook-form', () => {
   test('mikaminResolver should create errors', () => {
@@ -19,7 +19,7 @@ describe('react-hook-form', () => {
     enum Currency {RUB, USD}
 
     const resolver = mikaminResolver({
-      names: each(number),
+      names: list(number),
       content: {ru: jsonString, en: jsonString},
       manual: {ru: jsonString, en: jsonString},
       params: list({
@@ -42,7 +42,7 @@ describe('react-hook-form', () => {
         content: {ru: 'ru must be JSON!', en: 'en must be JSON!'},
         manual: {ru: 'ru must be JSON!', en: 'en must be JSON!'},
         params: [
-          {},
+          null,
           {
             label: {ru: 'ru must be string!', en: 'en must be string!'},
             type: 'type must be one of these values: 0!',

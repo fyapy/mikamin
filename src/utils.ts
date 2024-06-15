@@ -10,7 +10,7 @@ export const normalizeRules = (rules: Rule[] | Rule) => Array.isArray(rules)
   ? rules
   : [rules]
 
-export function fileEachRule(
+export function fireEachRule(
   rules: Rule[],
   name: string,
   value: any,
@@ -38,7 +38,7 @@ export function handleArrayLikeField(
     ? [array]
     : normalizeRules(rules)
 
-  const errors = fileEachRule(_rules, name, value, language)
+  const errors = fireEachRule(_rules, name, value, language)
   if (errors) {
     if (!accumulator[name]) {
       accumulator[name] = {...errorBase}

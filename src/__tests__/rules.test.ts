@@ -2,7 +2,6 @@ import {describe, test, expect} from 'vitest'
 import {
   ip,
   uuid,
-  each,
   bool,
   string,
   noCyrillic,
@@ -21,8 +20,8 @@ describe('handleSchema', () => {
   const rileList = stringNumber
   const name2 = optional(string)
 
-  const each1 = each(string)
-  const each2 = each(stringNumber)
+  const each1 = list(string)
+  const each2 = list(stringNumber)
 
   const list1 = list({
     key: optional(string),
@@ -96,17 +95,13 @@ describe('handleSchema', () => {
 
   test('each should validate values in list', () => {
     const errors = handleSchema({
-      schema: {
-        ids: each(string),
-      },
-      values: {
-        ids: ['1', ''],
-      },
+      schema: {ids: list(string)},
+      values: {ids: ['1', '']},
     })
 
     expect(errors).toEqual({
       ids: {
-        __type: 'each',
+        __type: 'list',
         inner: [null, 'ids must be string!'],
       },
     })
@@ -114,15 +109,13 @@ describe('handleSchema', () => {
 
   test('each should validate own property', () => {
     const errors = handleSchema({
-      schema: {
-        ids: each(string, requiredList),
-      },
+      schema: {ids: list(string, requiredList)},
       values: {},
     })
 
     expect(errors).toEqual({
       ids: {
-        __type: 'each',
+        __type: 'list',
         field: 'ids must be a array, and not empty!',
       },
     })

@@ -1,7 +1,7 @@
-import {type List, type AnyObject, type HandleSchema, Types} from './types.js'
-import {handleArrayLikeField} from './utils.js'
+import {type List, type AnyObject, type HandleSchema, Types, Rule} from './types.js'
+import {fireEachRule, handleArrayLikeField, normalizeRules} from './utils.js'
 
-const eachErrorBase = {
+const errorBase = {
   __type: Types.List,
 }
 export function handleList(
@@ -18,33 +18,45 @@ export function handleList(
     value,
     language,
     accumulator,
-    eachErrorBase,
+    errorBase,
   )
 
   if (Array.isArray(value) && value.length !== 0) {
     let hasError = false
-    const errorsList = [] as Array<AnyObject | null>
+    const errorsList = [] as Array<AnyObject | string | null>
 
-    for (const [index, val] of value.entries()) {
-      const errors = __handleSchema({
-        schema: list.__schema,
-        values: val || {},
-        language,
-      })
+    if (Array.isArray(list.__schema) || typeof list.__schema?.valid === 'function') {
+      const rules = normalizeRules(list.__schema as Rule | Rule[])
 
-      if (Object.keys(errors).length !== 0) {
-        hasError = true
-        errorsList[index] = errors
-      } else {
-        errorsList[index] = null
+      for (const [index, val] of value.entries()) {
+        const errors = fireEachRule(rules, name, val, language)
+        if (errors) {
+          hasError = true
+          errorsList[index] = errors
+        } else {
+          errorsList[index] = null
+        }
+      }
+    } else {
+      for (const [index, val] of value.entries()) {
+        const errors = __handleSchema({
+          schema: list.__schema,
+          values: val || {},
+          language,
+        })
+
+        if (Object.keys(errors).length !== 0) {
+          hasError = true
+          errorsList[index] = errors
+        } else {
+          errorsList[index] = null
+        }
       }
     }
 
     if (hasError) {
       if (!accumulator[name]) {
-        accumulator[name] = {
-          ...eachErrorBase,
-        }
+        accumulator[name] = {...errorBase}
       }
       if (!accumulator[name].inner) accumulator[name].inner = errorsList
     }

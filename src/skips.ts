@@ -3,7 +3,7 @@ import {types} from './constants.js'
 
 // or extends Rule | Rule[]
 export const nullable = <R extends Rule>(rules: R): SkipRulesIf<R['type'], null> => ({
-  type: types.any,
+  type: types.null,
   skipType: types.null,
   __type: Types.Skip,
   __skip: value => value === null,
@@ -12,7 +12,7 @@ export const nullable = <R extends Rule>(rules: R): SkipRulesIf<R['type'], null>
 
 // or extends Rule | Rule[]
 export const optional = <R extends Rule>(rules: R): SkipRulesIf<R['type'], undefined> => ({
-  type: types.any,
+  type: types.undefined,
   skipType: types.undefined,
   __type: Types.Skip,
   __skip: value => typeof value === 'undefined',

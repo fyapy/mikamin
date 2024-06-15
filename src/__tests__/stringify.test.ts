@@ -1,5 +1,5 @@
 import {describe, test, expect} from 'vitest'
-import {each, handleSchema, jsonString, list, mikaminStringify, number, oneOf, string} from '../index.ts'
+import {handleSchema, jsonString, list, mikaminStringify, number, oneOf, string} from '../index.ts'
 
 describe('stringify', () => {
   test('mikaminStringify should create errors string', () => {
@@ -20,7 +20,7 @@ describe('stringify', () => {
 
     const errors = handleSchema({
       schema: {
-        names: each(number),
+        names: list(number),
         content: {ru: string, en: string},
         manual: {ru: jsonString, en: jsonString},
         params: list({

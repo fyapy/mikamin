@@ -13,20 +13,14 @@ function iterateErrors(errorList: AnyObject, errors: string[], prefix?: string) 
       const error = errorList[originalProp]
 
       if (typeof error === 'object' && error !== null) {
-        if (error.__type === Types.Each) {
+        if (error.__type === Types.List) {
           if (Array.isArray(error.inner)) {
             error.inner.forEach((innerError: any, index: number) => {
-              if (innerError !== null) {
+              if (typeof innerError === 'string') {
                 errors.push(`${prop}[${index}] - ${innerError}`)
+              } else if (innerError !== null) {
+                iterateErrors(innerError, errors, `${prop}[${index}]`)
               }
-            })
-          } else {
-            errors.push(`${prop} - ${error.field}`)
-          }
-        } else if (error.__type === Types.List) {
-          if (Array.isArray(error.inner)) {
-            error.inner.forEach((innerError: any, index: number) => {
-              iterateErrors(innerError, errors, `${prop}[${index}]`)
             })
           } else {
             errors.push(`${prop} - ${error.field}`)
