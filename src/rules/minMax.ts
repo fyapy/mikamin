@@ -9,7 +9,7 @@ export const minMax = (min: number, max: number): Rule<number> => ({
   meta: {min, max},
   valid: val => {
     if (typeof val === 'number' && !Number.isNaN(val)) {
-      return !(val <= min || val > max)
+      return !(val < min || val > max)
     }
 
     return false
