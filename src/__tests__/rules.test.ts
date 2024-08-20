@@ -51,6 +51,16 @@ describe('handleSchema', () => {
     valueId: string,
   }
 
+  type Schema3 = Infer<typeof schema3>
+  const schema3 = {
+    params: list({
+      values: list({
+        id: optional(string),
+        amount: number,
+      }),
+    }),
+  }
+
   test('string should throw error for null', () => {
     const nullErrors = handleSchema({
       schema: {
